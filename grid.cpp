@@ -1,0 +1,63 @@
+#include "grid.h"
+#include <cstring>
+#include <fstream>
+#include <GL/glut.h>
+Grid::Grid(){
+
+}
+
+Grid::~Grid(){
+  for (int x = 0; x < width; x+=1){
+    for (int y = 0; y < height; y+=1){
+      delete[] cubes[x][y];
+    }
+    delete[] cubes[x];    
+  }
+  delete[] cubes;
+  
+}
+
+void Grid::load_dimensions(int height, int width, int depth){
+    this->height = (height/2)+1;
+    this->width = (width/2)+1;
+    this->depth = (depth/2)+1;
+}
+
+void Grid::create_grid(){
+
+  cubes = new Cube**[width];
+  for (int x = 0; x < width; x+=1){
+      cubes[x] = new Cube*[height];
+      for (int y = 0; y < height; y+=1){
+        cubes[x][y] = new Cube[depth];
+          for (int z = 0; z < depth; z+=1){
+             // cubes[x][y][z] = new Cube*[depth];
+              //Cube* c = new Cube();
+             cubes[x][y][z].verticies[0] = Point{x,y,z};
+             cubes[x][y][z].verticies[1] = Point{x+1,y,z};
+             cubes[x][y][z].verticies[2] = Point{x+1,y+1,z};
+             cubes[x][y][z].verticies[3] = Point{x, y+1,z};
+             cubes[x][y][z].verticies[4] = Point{x ,y,z+1};
+             cubes[x][y][z].verticies[5] = Point{x+1,y,z+1};
+             cubes[x][y][z].verticies[6] = Point{x+1,y+1,z+1};
+             cubes[x][y][z].verticies[7] = Point{x,y+1,z+1};
+   
+          }
+      }
+  }
+}
+
+void Grid::render(){
+
+  glColor3f(0,0,0);
+  for (int x = 0; x < width; x+=1){
+      for (int y = 0; y < height; y+=1){
+          for (int z = 0; z < depth; z+=1){
+             cubes[x][y][z].draw();
+          }
+      }
+  }
+
+}
+
+
