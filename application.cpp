@@ -209,15 +209,15 @@ void read_dimensions( const char * fileName, int &width, int &height, int &depth
       // read commentaries
       getline(file, line);
 
-      search = "width:";
+      search = "width";
       if (line.find(search) != string::npos)
         height = atoi(line.substr(line.find(search) + search.length()).c_str());
 
-      search = "height:";
+      search = "height";
       if (line.find(search) != string::npos)
         width = atoi(line.substr(line.find(search) + search.length()).c_str());
       
-      search = "depth:";
+      search = "depth";
       if (line.find(search) != string::npos)
         depth = atoi(line.substr(line.find(search) + search.length()).c_str());
   

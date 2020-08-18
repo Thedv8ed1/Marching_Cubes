@@ -25,15 +25,18 @@ int main(int argc, char* argv[])
 
 void circle(){
     std::fstream file;
-    file.open("circle.txt",std::fstream::out);
 
+    file.open("circle.txt",std::fstream::out);
+    file << "# Dimentions are for points NOT CUBES\n" <<
+    "# width 20\n"<<"# height 20\n"<<"# depth 20\n";
+    int constant = 5;
     for(int x = 0; x < 20; x++){
         for(int y = 0; y < 20; y++){
             for(int z = 0; z < 20; z++){
                 file << x << " ";
                 file << y << " ";
                 file << z << " ";
-                file << (x-5)*(x-5)+(y-5)*(y-5)+(z-5)*(z-5)-25;
+                file << (x-constant)*(x-constant)+(y-constant)*(y-constant)+(z-constant)*(z-constant)-25;
                 file << std::endl;
             }   
         }      
@@ -116,60 +119,32 @@ void Ttable(){
 
 
 void T2(){
-    std::fstream file;
-    file.open("T2.txt",std::fstream::out);
-    file << "vector<lookup> table = {" << std::endl;
-    for(int i = 0; i< 256; i++){
-        int count = 0;
-        file << "/*"<<i<<"*/ "<< "lookup(";
-        if((i&1)){//v0
-            if((i&2)==0){file<< "{make_pair(0,1)},";count++;} // if not v1 
-            if((i&8)==0){file<< "{make_pair(0,3)},";count++;} // if not v3 
-            if((i&16)==0){file<< "{make_pair(0,4)},";count++;} // if not v4
-        }
-        if(i&2){//v1
-            if((i&1)==0){file<< "{make_pair(1,0)},";count++;} // if not v0 
-            if((i&4)==0){file<< "{make_pair(1,2)},";count++;} // if  not v2
-            if((i&32)==0){file<< "{make_pair(1,5)},";count++;} // if not v5
-        }
-        if(i&4 ){//v2
-            if((i&2)==0){file<< "{make_pair(2,1)},";count++;} // if not v1 
-            if((i&8)==0){file<< "{make_pair(2,3)},";count++;} // if not v3 
-            if((i&64)==0){file<< "{make_pair(2,6)},";count++;} // if not v6
-        }
-        if(i&8 ){//v3
-            if((i&1)==0){file<< "{make_pair(3,0)},";count++;} // if not v0 
-            if((i&4)==0){file<< "{make_pair(3,2)},";count++;} // if not v2 
-            if((i&128)==0){file<< "{make_pair(3,7)},";count++;} // if not v7
-        }
-        if(i&16 ){//v4
-            if((i&1)==0){file<< "{make_pair(4,0)},";count++;} // if not v0 
-            if((i&32)==0){file<< "{make_pair(4,5)},";count++;} // if not v5 
-            if((i&128)==0){file<< "{make_pair(4,7)},";count++;} // if not v7 
-        }
-        if(i&32){//v5
-            if((i&2)==0){file<< "{make_pair(5,1)},";count++;} // if not v1 
-            if((i&16)==0){file<< "{make_pair(5,4)},";count++;} // if not v4
-            if((i&64)==0){file<< "{make_pair(5,6)},";count++;} // if not v6 
-        }
-        if(i&64 ){//v6
-            if((i&4)==0){file<< "{make_pair(6,2)},";count++;} // if not v2 
-            if((i&32)==0){file<< "{make_pair(6,5)},";count++;} // if not v5 
-            if((i&128)==0){file<< "{make_pair(6,7)},";count++;} // if not v7 
-        }
-        if(i&128){//v7
-            if((i&8)==0){file<< "{make_pair(7,3)},";count++;} // if not v3 
-            if((i&16)==0){file<< "{make_pair(7,4)},";count++;} // if not v4 
-            if((i&64)==0){file<< "{make_pair(7,6)},";count++;} // if not v6 
-        }
-        if(!(i ==0 || i== 255)){
-        int length = file.tellg();
-        file.seekg(length-1);
-        file << "";
-        }
+      std::fstream file;
 
-        file << ")," << std::endl;
-    }
-    file << "};";
+    file.open("nope.txt",std::fstream::out);
+    file << "# Dimentions are for points NOT CUBES\n" <<
+    "# width 16\n"<<"# height 16\n"<<"# depth 1\n";
+    int constant = 5;
+    for(int x = 0; x < 16; x++){
+        for(int y = 0; y < 16; y++){
+            for(int z = 0; z < 1; z++){
+                //file << x << " ";
+                //file << y << " ";
+                //file << z << " ";
+                //file << (x-constant)*(x-constant)+(y-constant)*(y-constant)+(z-constant)*(z-constant)-25;
+                //file << std::endl;
+            }   
+        }      
+    }/*
+    0 0 0 -1
+    1 0 0 1
+    1 0 1 1
+    0 0 1 1
+
+    0 1 0 1
+    1 1 0 1
+    1 1 1 1
+    0 1 1 1
+    */
     file.close();
 }
