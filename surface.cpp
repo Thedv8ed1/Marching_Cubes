@@ -113,65 +113,53 @@ void Surface::generate_triangles(){
              for (int a = 0; a < lookupCube.X.size(); a++) {
                 if (lookupCube.X.at(a).first == 0) {
                     xyz[0] = Point{i+0.5, j+0, k+0}; 
-                    //xyz[0]=interpolate2(cube.verticies[0],cube.verticies[1],cube.values[0],cube.values[1]); 
-                    xyz[0]=interpolate(xyz[0],cube.values[0],cube.values[1]);          
+                    xyz[0]=interpolate(cube.verticies[0],cube.verticies[1],cube.values[0],cube.values[1]); 
                 }
                 else if (lookupCube.X.at(a).first == 3) {
                     xyz[0] = Point{i+0.5, j+0, k+1};
-                   // xyz[0]=interpolate2(cube.verticies[3],cube.verticies[2],cube.values[3],cube.values[2]);
-                   xyz[0]=interpolate(xyz[0],cube.values[2],cube.values[3]);
+                    xyz[0]=interpolate(cube.verticies[3],cube.verticies[2],cube.values[3],cube.values[2]);
                 }
                 else if (lookupCube.X.at(a).first == 4) {
                     xyz[0] = Point{i+0.5, j+1, k+0};
-                   //xyz[0]=interpolate2(cube.verticies[4],cube.verticies[5],cube.values[4],cube.values[5]);
-                     xyz[0]=interpolate(xyz[0],cube.values[4],cube.values[5]);           
+                   xyz[0]=interpolate(cube.verticies[4],cube.verticies[5],cube.values[4],cube.values[5]);
                 }
                 else {
                     xyz[0] = Point{i+0.5, j+1, k+1};  
-                    //xyz[0]=interpolate2(cube.verticies[6],cube.verticies[7],cube.values[6],cube.values[7]);
-                    xyz[0]=interpolate(xyz[0],cube.values[6],cube.values[7]);        
+                   xyz[0]=interpolate(cube.verticies[6],cube.verticies[7],cube.values[6],cube.values[7]);
                 }
                 for (int b = 0; b < lookupCube.Y.size(); b++) {
                     if (lookupCube.Y.at(b).first == 0) {
                         xyz[1] = Point{i+0, j+0.5, k+0}; 
-                        //xyz[1]=interpolate2(cube.verticies[0],cube.verticies[4],cube.values[0],cube.values[4]);
-                        xyz[1]=interpolate(xyz[1],cube.values[0],cube.values[4]);          
+                        xyz[1]=interpolate(cube.verticies[0],cube.verticies[4],cube.values[0],cube.values[4]);
                     }
                     else if (lookupCube.Y.at(b).first == 1) {
                         xyz[1] = Point{i+1, j+0.5, k+0};
-                        //xyz[1]=interpolate2(cube.verticies[1],cube.verticies[5],cube.values[1],cube.values[5]);
-                        xyz[1]=interpolate(xyz[1],cube.values[1],cube.values[5]);
+                        xyz[1]=interpolate(cube.verticies[1],cube.verticies[5],cube.values[1],cube.values[5]);
                     }
                     else if (lookupCube.Y.at(b).first == 2) {
                         xyz[1] = Point{i+1, j+0.5, k+1};  
-                        //xyz[1]=interpolate2(cube.verticies[2],cube.verticies[6],cube.values[2],cube.values[6]);   
-                        xyz[1]=interpolate(xyz[1],cube.values[2],cube.values[6]);      
+                        xyz[1]=interpolate(cube.verticies[2],cube.verticies[6],cube.values[2],cube.values[6]);   
                     }
                     else {
                         xyz[1] = Point{i+0, j+0.5, k+1};
-                        //xyz[1]=interpolate2(cube.verticies[3],cube.verticies[7],cube.values[3],cube.values[7]);
-                        xyz[1]=interpolate(xyz[1],cube.values[3],cube.values[7]);           
+                        xyz[1]=interpolate(cube.verticies[3],cube.verticies[7],cube.values[3],cube.values[7]);
                     }
                     for (int c = 0; c < lookupCube.Z.size(); c++) {
                         if (lookupCube.Z.at(c).first == 0) {
                             xyz[2] = Point{i+0, j+0, k+0.5};
-                            //xyz[2]=interpolate2(cube.verticies[0],cube.verticies[3],cube.values[0],cube.values[3]);
-                            xyz[2]=interpolate(xyz[2],cube.values[0],cube.values[3]);
+                            xyz[2]=interpolate(cube.verticies[0],cube.verticies[3],cube.values[0],cube.values[3]);
                         }
                         else if (lookupCube.Z.at(c).first == 1) {
                             xyz[2] = Point{i+1, j+0, k+0.5};
-                            //xyz[2]=interpolate2(cube.verticies[1],cube.verticies[2],cube.values[1],cube.values[2]);
-                            xyz[2]=interpolate(xyz[2],cube.values[1],cube.values[2]);
+                            xyz[2]=interpolate(cube.verticies[1],cube.verticies[2],cube.values[1],cube.values[2]);
                         }
                         else if (lookupCube.Z.at(c).first == 5) {
                             xyz[2] = Point{i+1, j+1, k+0.5};
-                           //xyz[2]=interpolate2(cube.verticies[5],cube.verticies[6],cube.values[5],cube.values[6]);
-                           xyz[2]=interpolate(xyz[2],cube.values[5],cube.values[6]);
+                           xyz[2]=interpolate(cube.verticies[5],cube.verticies[6],cube.values[5],cube.values[6]);
                         }
                         else {
                             xyz[2] = Point{i+0, j+1, k+0.5};
-                            //xyz[2]=interpolate2(cube.verticies[4],cube.verticies[7],cube.values[4],cube.values[7]);
-                            xyz[2]=interpolate(xyz[2],cube.values[4],cube.values[7]);
+                           xyz[2]=interpolate(cube.verticies[4],cube.verticies[7],cube.values[4],cube.values[7]);
 
                         }
                         triangles.push_back(Triangle{xyz[0],xyz[1],xyz[2]});
@@ -184,67 +172,69 @@ void Surface::generate_triangles(){
                     Triangle temp[2];
                     //triangle 1
                     xyz[0] = Point{i,j,k};
-                    xyz[0] = interpolate(xyz[0],cube.values[0],cube.values[1]);
+                    xyz[0]= interpolate(cube.verticies[0],cube.verticies[1],cube.values[0],cube.values[1]); 
                     xyz[1] = Point{i,j,k+1};
-                    xyz[1] = interpolate(xyz[1],cube.values[4],cube.values[5]);
+                    xyz[1]= interpolate(cube.verticies[4],cube.verticies[5],cube.values[4],cube.values[5]); 
                     xyz[2] = Point{i,j+1,k+1};
-                    xyz[2] = interpolate(xyz[2],cube.values[7],cube.values[6]);
+                    xyz[2]= interpolate(cube.verticies[7],cube.verticies[6],cube.values[7],cube.values[6]);
                     temp[0] = Triangle{xyz[0],xyz[1],xyz[2]};
                    
                     //triangle 2
                     xyz[0] = Point{i,j,k};
-                    xyz[0] = interpolate(xyz[0],cube.values[0],cube.values[1]);
+                    xyz[0]= interpolate(cube.verticies[0],cube.verticies[1],cube.values[0],cube.values[1]); 
                     xyz[1] = Point{i,j+1,k+1};
-                    xyz[1] = interpolate(xyz[1],cube.values[7],cube.values[6]);
+                    xyz[1]= interpolate(cube.verticies[7],cube.verticies[6],cube.values[7],cube.values[6]);
                     xyz[2] = Point{i,j+1,k};
-                    xyz[2] = interpolate(xyz[2],cube.values[4],cube.values[5]);
+                    xyz[2]= interpolate(cube.verticies[2],cube.verticies[3],cube.values[2],cube.values[3]);
                     temp[1] = Triangle{xyz[0],xyz[1],xyz[2]};
                     triangles.push_back(temp[0]);
                     triangles.push_back(temp[1]);
             }
-
+            // y
             else if (!lookupCube.X.size() && !lookupCube.Z.size() && lookupCube.Y.size()) {
                     Triangle temp[2];
                     //triangle 1
                     xyz[0] = Point{i,j,k};
-                    xyz[0] = interpolate(xyz[0],cube.values[0],cube.values[4]);
+                    xyz[0]= interpolate(cube.verticies[0],cube.verticies[4],cube.values[0],cube.values[4]);
                     xyz[1] = Point{i+1,j,k};
-                    xyz[1] = interpolate(xyz[1],cube.values[1],cube.values[5]);
+                    xyz[1]= interpolate(cube.verticies[1],cube.verticies[5],cube.values[1],cube.values[5]);
                     xyz[2] = Point{i+1,j,k+1};
-                    xyz[2] = interpolate(xyz[2],cube.values[2],cube.values[6]);
+                    xyz[2]= interpolate(cube.verticies[2],cube.verticies[6],cube.values[2],cube.values[6]);
                     temp[0] = Triangle{xyz[0],xyz[1],xyz[2]};
                     //triangle 2
                     xyz[0] = Point{i,j,k};
-                    xyz[0] = interpolate(xyz[0],cube.values[0],cube.values[4]);
+                    xyz[0]= interpolate(cube.verticies[0],cube.verticies[4],cube.values[0],cube.values[4]);
                     xyz[1] = Point{i+1,j,k+1};
-                    xyz[1] = interpolate(xyz[1],cube.values[2],cube.values[6]);
+                    xyz[1]= interpolate(cube.verticies[2],cube.verticies[6],cube.values[2],cube.values[6]);
                     xyz[2] = Point{i,j,k+1};
-                    xyz[2] = interpolate(xyz[2],cube.values[3],cube.values[7]);
+                    xyz[2]= interpolate(cube.verticies[3],cube.verticies[7],cube.values[3],cube.values[7]);
                     temp[1] = Triangle{xyz[0],xyz[1],xyz[2]};
                     triangles.push_back(temp[0]);
                     triangles.push_back(temp[1]);
             }
+            
              else if (!lookupCube.X.size() && !lookupCube.Y.size() && lookupCube.Z.size()) {
                      Triangle temp[2];
                     //triangle 1
                     xyz[0] = Point{i,j,k};
-                    xyz[0] = interpolate(xyz[0],cube.values[0],cube.values[3]);
+                    xyz[0]= interpolate(cube.verticies[0],cube.verticies[3],cube.values[0],cube.values[3]);
                     xyz[1] = Point{i+1,j,k};
-                    xyz[1] = interpolate(xyz[1],cube.values[1],cube.values[2]);
+                    xyz[1]= interpolate(cube.verticies[1],cube.verticies[2],cube.values[1],cube.values[2]);
                     xyz[2] = Point{i+1,j+1,k};
-                    xyz[2] = interpolate(xyz[2],cube.values[5],cube.values[6]);
+                    xyz[2]= interpolate(cube.verticies[5],cube.verticies[6],cube.values[5],cube.values[6]);
                     temp[0] = Triangle{xyz[0],xyz[1],xyz[2]};
                     //triangle 2
                     xyz[0] = Point{i,j,k};
-                    xyz[0] = interpolate(xyz[0],cube.values[0],cube.values[3]);
+                    xyz[0]= interpolate(cube.verticies[0],cube.verticies[3],cube.values[0],cube.values[3]);
                     xyz[1] = Point{i+1,j+1,k};
-                    xyz[1] = interpolate(xyz[1],cube.values[1],cube.values[2]);
+                    xyz[1]= interpolate(cube.verticies[1],cube.verticies[2],cube.values[1],cube.values[2]);
                     xyz[2] = Point{i,j+1,k};
-                    xyz[2] = interpolate(xyz[2],cube.values[4],cube.values[7]);
+                    xyz[1]= interpolate(cube.verticies[4],cube.verticies[7],cube.values[4],cube.values[7]);
                     temp[1] = Triangle{xyz[0],xyz[1],xyz[2]};
                     triangles.push_back(temp[0]);
                     triangles.push_back(temp[1]);
              }
+             
          }
      }
   } 

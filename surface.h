@@ -26,23 +26,15 @@ class Surface{
     int get_index(double *vertValues);
     void generate_triangles();
 
-/*
+
  Point interpolate(Point p1, Point p2,double v1, double v2){ 
         Point p;    
-        p.x = p1.x + (abs(v1)) / (abs(v1) + abs(v2));
-        p.y = p1.y + (abs(v1)) / (abs(v1) + abs(v2));
-        p.z = p1.z + (abs(v1)) / (abs(v1) + abs(v2));
+        p.x = p1.x + (abs(v1)) / (abs(v1) + abs(v2))* (p2.x - p1.x);
+        p.y = p1.y + (abs(v1)) / (abs(v1) + abs(v2))*(p2.y - p1.y);
+        p.z = p1.z + (abs(v1)) / (abs(v1) + abs(v2))*(p2.z - p1.z);
         return p;
     }
-    */
-    
-     Point interpolate(Point p1,double v1, double v2){ 
-        Point p;    
-        p.x = p1.x + (abs(v1)) / (abs(v1) + abs(v2));
-        p.y = p1.y + (abs(v1)) / (abs(v1) + abs(v2));
-        p.z = p1.z + (abs(v1)) / (abs(v1) + abs(v2));
-        return p;
-    }
+
     
 
     void render_surface();

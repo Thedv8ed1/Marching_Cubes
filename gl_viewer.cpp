@@ -61,6 +61,7 @@ void gl_viewer::init(int argc, char *argv[], int width, int height)
 
 void gl_viewer::run()
 {
+    
     // pass execution to Glut. Now Glut is in control of the main loop.
     glutMainLoop();
 }

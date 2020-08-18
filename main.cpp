@@ -1,5 +1,6 @@
 #include "application.h"
 #include <fstream>
+#include <iomanip>
 void circle();
 void Etable();
 void Ttable();
@@ -8,9 +9,9 @@ void T2();
 int main(int argc, char* argv[])
 {
     T2();
-    circle();
-    Etable();
-    //Ttable();
+   circle();
+    Etable(); 
+    Ttable();
   //  return 0;
     int width = 640;
     int height = 480;
@@ -29,14 +30,14 @@ void circle(){
     file.open("circle.txt",std::fstream::out);
     file << "# Dimentions are for points NOT CUBES\n" <<
     "# width 20\n"<<"# height 20\n"<<"# depth 20\n";
-    int constant = 5;
+    int shiftAmt = 7;
     for(int x = 0; x < 20; x++){
         for(int y = 0; y < 20; y++){
             for(int z = 0; z < 20; z++){
                 file << x << " ";
                 file << y << " ";
                 file << z << " ";
-                file << (x-constant)*(x-constant)+(y-constant)*(y-constant)+(z-constant)*(z-constant)-25;
+                file << (x-shiftAmt)*(x-shiftAmt)+(y-shiftAmt)*(y-shiftAmt)+(z-shiftAmt)*(z-shiftAmt)-25;
                 file << std::endl;
             }   
         }      
@@ -101,13 +102,22 @@ void Ttable(){
     std::fstream fileIN;
     fileIN.open("table.txt",std::fstream::in);
 
+
     std::fstream fileOUT;
-    fileOUT.open("table2.txt",std::fstream::out);
+    fileOUT.open("binTableIndex.txt",std::fstream::out);
+    for(int i = 0; i < 256; i++){
+     for(int j = 8; j >= 0;j--){
+            fileOUT << ((i>>(j))&1);  
+        }
+        fileOUT << " ";
+                //if(i>0 && i%16 == 0){fileOUT << std::endl;}
+
+}
 
     int i = 0;    
-    while(!fileIN.eof()){
+   // while(!fileIN.eof()){
 
-    }
+    //}
 
 
     fileIN.close();
@@ -119,23 +129,42 @@ void Ttable(){
 
 
 void T2(){
+
+      std::fstream fileIN;
+      fileIN.open("binTableIndex.txt",std::fstream::in);
+
       std::fstream file;
 
     file.open("nope.txt",std::fstream::out);
     file << "# Dimentions are for points NOT CUBES\n" <<
-    "# width 16\n"<<"# height 16\n"<<"# depth 1\n";
-    int constant = 5;
-    for(int x = 0; x < 16; x++){
-        for(int y = 0; y < 16; y++){
-            for(int z = 0; z < 1; z++){
-                //file << x << " ";
-                //file << y << " ";
-                //file << z << " ";
-                //file << (x-constant)*(x-constant)+(y-constant)*(y-constant)+(z-constant)*(z-constant)-25;
-                //file << std::endl;
-            }   
-        }      
-    }/*
+    "# width 64\n"<<"# height 64\n"<<"# depth 4\n";
+
+ 
+    int x=0,y=0,z=0;
+    while(!fileIN.eof()){
+    std::string s; s.resize(8);
+    fileIN >> s;
+    
+    file << x << " " << y << " " << z << " " << (s[0]=='0'? "1" : "-1") << std::endl;
+    file << x+1 << " " << y << " " << z << " " << (s[1]=='0'? "1" : "-1") << std::endl;
+    file << x+1 << " " << y << " " << z+1 << " " << (s[2]=='0'? "1" : "-1") << std::endl;
+    file << x << " " << y << " " << z+1 << " " << (s[3]=='0'? "1" : "-1") << std::endl;
+    file << x << " " << y << " " << z << " " << (s[4]=='0'? "1" : "-1") << std::endl;
+    file << x+1 << " " << y+1 << " " << z << " " << (s[5]=='0'? "1" : "-1") << std::endl;
+    file << x+1 << " " << y+1 << " " << z+1 << " " << (s[6]=='0'? "1" : "-1") << std::endl;
+    file << x << " " << y+1 << " " << z+1 << " " << (s[7]=='0'? "1" : "-1") << std::endl;
+    x+=2;
+    if(x >16){
+        x=0;
+        y+=2;
+    }
+
+  //  std::cout << s <<std::endl;
+
+
+    }
+
+              /*
     0 0 0 -1
     1 0 0 1
     1 0 1 1
