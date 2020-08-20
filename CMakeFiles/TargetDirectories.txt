@@ -1,0 +1,3 @@
+/mnt/c/Users/thedv/Desktop/lab-04-files/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/thedv/Desktop/lab-04-files/CMakeFiles/edit_cache.dir
+/mnt/c/Users/thedv/Desktop/lab-04-files/CMakeFiles/shaders.dir
