@@ -60,4 +60,30 @@ void Grid::render(){
 
 }
 
+void Grid::renderAxis(){
+  Point xyz[3];
+  //x
+  glBegin(GL_LINES);    
+  glColor3f(1 ,0 ,0 );
+  for(double i = 0; i < 1;i+=0.2){
+    glVertex3f(0, i, 0);
+    glVertex3f(100, i, 0);
+  }
 
+  //y
+    glColor3f(0 ,1 ,0 );
+  for(double i = 0; i < 1;i+=0.2){
+    glVertex3f(i, 0, 0);
+    glVertex3f(i, 100, 0);
+  }
+
+
+  //z
+    glColor3f(0 ,0 ,1 );
+  for(double i = 0; i < 1;i+=0.2){
+    glVertex3f(0, i, 0);
+    glVertex3f(0, i, 100);
+  }
+glEnd();
+
+}

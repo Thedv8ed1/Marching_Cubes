@@ -30,7 +30,7 @@ void circle(){
     file.open("circle.txt",std::fstream::out);
     file << "# Dimentions are for points NOT CUBES\n" <<
     "# width 20\n"<<"# height 20\n"<<"# depth 20\n";
-    int shiftAmt = 7;
+    int shiftAmt = 5;
     for(int x = 0; x < 20; x++){
         for(int y = 0; y < 20; y++){
             for(int z = 0; z < 20; z++){
@@ -177,3 +177,8 @@ void T2(){
     */
     file.close();
 }
+
+
+// x-red
+// y-green
+//z-blue

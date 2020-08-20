@@ -12,6 +12,7 @@ class Grid{
   void load_dimensions(int height, int width, int depth);
   void create_grid();
   void render();
+  void renderAxis();
 
   private:
   int height,width,depth;
