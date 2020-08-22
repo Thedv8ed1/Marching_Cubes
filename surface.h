@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <vector>
 #include <utility>
+
+
 using namespace std;
 class lookup {
     private:
@@ -17,6 +19,7 @@ class lookup {
         lookup() {};
         lookup(std::vector<std::pair<int, int>>x, std::vector<std::pair<int, int>>y, std::vector<std::pair<int, int>>z) {X = x; Y = y; Z = z;}
 };
+
 class Surface{
     public:
     Surface();
@@ -36,12 +39,12 @@ class Surface{
         return p;
     }
 
-    
-
     void render_surface();
 
+   double*** points;
+
+
     std::vector<Triangle> triangles;
-    double ***points = nullptr; 
     private:
     int width,height,depth;
 

@@ -188,43 +188,13 @@ void application::keyboard_event(unsigned char key, int x, int y) {
 
 void application::load_grid(char *fileName){
   int x,y,z;
-  read_dimensions(fileName,x,y,z);
 
-  grid.load_dimensions(x,y,z);
+  grid.load_dimensions(3,3,3);
 
   grid.create_grid();
 
-  surface.load_dimensions(x,y,z);
-
   surface.load_surface_data(fileName);
 
-}
-
-void read_dimensions( const char * fileName, int &width, int &height, int &depth){
-  ifstream file;
-  file.open(fileName);
-  
-  while (!file.eof()) {
-      string line, search;
-
-      // read commentaries
-      getline(file, line);
-
-      search = "width";
-      if (line.find(search) != string::npos)
-        height = atoi(line.substr(line.find(search) + search.length()).c_str());
-
-      search = "height";
-      if (line.find(search) != string::npos)
-        width = atoi(line.substr(line.find(search) + search.length()).c_str());
-      
-      search = "depth";
-      if (line.find(search) != string::npos)
-        depth = atoi(line.substr(line.find(search) + search.length()).c_str());
-  
-  }
-
-  file.close();
 }
 
 void draw_obj(obj *o, int material_index) {

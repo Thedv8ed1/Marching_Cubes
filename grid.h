@@ -16,7 +16,6 @@ class Grid{
 
   private:
   int height,width,depth;
-  Cube*** cubes;
 };
 
 struct Point{
@@ -29,59 +28,13 @@ struct Triangle{
 
 class Cube{
 public:
-    Cube(){}
-    ~Cube(){}
-    void draw(){
-        glBegin(GL_LINES);
-          glColor3f(0 ,0 ,0 );
+  Cube(){}
+  ~Cube(){}
 
-        //glColor3f(1.0f, 0.0f, 0.0f); 
-       glVertex3f(verticies[0].x, verticies[0].y, verticies[0].z);
-        glVertex3f(verticies[1].x, verticies[1].y, verticies[1].z);
+  Point verticies[8];
 
-        glVertex3f(verticies[0].x, verticies[0].y, verticies[0].z);
-        glVertex3f(verticies[3].x, verticies[3].y, verticies[3].z);
-
-        glVertex3f(verticies[0].x, verticies[0].y, verticies[0].z);
-        glVertex3f(verticies[4].x, verticies[4].y, verticies[4].z);
-
-        glVertex3f(verticies[3].x, verticies[3].y, verticies[3].z);
-        glVertex3f(verticies[2].x, verticies[2].y, verticies[2].z);
-
-        glVertex3f(verticies[3].x, verticies[3].y, verticies[3].z);
-        glVertex3f(verticies[7].x, verticies[7].y, verticies[7].z);
-
-        glVertex3f(verticies[4].x, verticies[4].y, verticies[4].z);
-        glVertex3f(verticies[7].x, verticies[7].y, verticies[7].z);
-
-        glVertex3f(verticies[4].x, verticies[4].y, verticies[4].z);
-        glVertex3f(verticies[5].x, verticies[5].y, verticies[5].z);
-
-        glVertex3f(verticies[7].x, verticies[7].y, verticies[7].z);
-        glVertex3f(verticies[6].x, verticies[6].y, verticies[6].z);
-
-        glVertex3f(verticies[5].x, verticies[5].y, verticies[5].z);
-        glVertex3f(verticies[1].x, verticies[1].y, verticies[1].z);
-
-        glVertex3f(verticies[2].x, verticies[2].y, verticies[2].z);
-        glVertex3f(verticies[1].x, verticies[1].y, verticies[1].z);
-
-        glVertex3f(verticies[2].x, verticies[2].y, verticies[2].z);
-        glVertex3f(verticies[3].x, verticies[3].y, verticies[3].z);
-
-        glVertex3f(verticies[2].x, verticies[2].y, verticies[2].z);
-        glVertex3f(verticies[6].x, verticies[6].y, verticies[6].z);
-
-        glEnd();
-    };
-
-    Point verticies[8];
-
-      
-     double values[8];
+  double values[8];
     
 private:
 
-
 };
-

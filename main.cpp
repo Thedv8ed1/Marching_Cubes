@@ -102,6 +102,7 @@ void Etable(){
 }
 
 void Ttable(){
+    return;
     std::fstream fileIN;
     fileIN.open("table.txt",std::fstream::in);
 
