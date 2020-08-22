@@ -140,8 +140,8 @@ void application::draw_event() {
   glPopMatrix();
 
   // draw the grid
-  //grid.render();
-  grid.renderAxis();
+  grid.render();
+  //grid.renderAxis();
 
   surface.render_surface();
 

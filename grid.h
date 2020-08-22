@@ -21,7 +21,6 @@ class Grid{
 
 struct Point{
     double x=0,y=0,z = 0;
-    float value;
 };
 
 struct Triangle{
@@ -81,8 +80,6 @@ public:
       
      double values[8];
     
-    //Triangle *tri = new Triangle[5];
-   // int index;
 private:
 
 

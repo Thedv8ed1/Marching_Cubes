@@ -50,13 +50,31 @@ void Grid::create_grid(){
 void Grid::render(){
 
   glColor3f(0,0,0);
-  for (int x = 0; x < width; x+=1){
-      for (int y = 0; y < height; y+=1){
-          for (int z = 0; z < depth; z+=1){
-             cubes[x][y][z].draw();
-          }
+  glBegin(GL_LINES);
+/*
+  Render the grid
+*/
+  for (int x = 0; x < width; x+=1){ 
+    for(int y = 0; y < height; y++){  
+      for(int z = 0; z < depth; z++){
+        glColor3f(0 ,0 ,0 );
+
+        // draw x-axis lines
+        glVertex3f(0, y, z);
+        glVertex3f(width, y,z);
+
+        // draw y-axis lines 
+        glVertex3f(x, 0, z);
+        glVertex3f(x, height,z);
+
+        // draw z-axis lines 
+        glVertex3f(x, y, 0);
+        glVertex3f(x, y,depth);
       }
+    }
   }
+    glEnd();
+  
 
 }
 
