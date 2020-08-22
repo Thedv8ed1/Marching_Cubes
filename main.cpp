@@ -4,11 +4,9 @@
 void circle();
 void Etable();
 void Ttable();
-void T2();
 
 int main(int argc, char* argv[])
 {
-    T2();
    circle();
     Etable(); 
     Ttable();
@@ -26,11 +24,16 @@ int main(int argc, char* argv[])
 
 void circle(){
     std::fstream file;
+    const int width = 20;
+    const int height = 20;
+    const int depth = 20;
 
     file.open("circle.txt",std::fstream::out);
-    file << "# Dimentions are for points NOT CUBES\n" <<
-    "# width 20\n"<<"# height 20\n"<<"# depth 20\n";
-    int shiftAmt = 5;
+    file << "# Dimentions are for number of points NOT CUBES" <<
+    "\n# width " << width <<
+    "\n# height " << height<<
+    "\n# depth " << depth << std::endl;
+    int shiftAmt = 10;
     for(int x = 0; x < 20; x++){
         for(int y = 0; y < 20; y++){
             for(int z = 0; z < 20; z++){
@@ -124,61 +127,3 @@ void Ttable(){
     fileOUT.close();
 
 }
-
-// (n mod 3) +1?
-
-
-void T2(){
-
-      std::fstream fileIN;
-      fileIN.open("binTableIndex.txt",std::fstream::in);
-
-      std::fstream file;
-
-    file.open("nope.txt",std::fstream::out);
-    file << "# Dimentions are for points NOT CUBES\n" <<
-    "# width 64\n"<<"# height 64\n"<<"# depth 4\n";
-
- 
-    int x=0,y=0,z=0;
-    while(!fileIN.eof()){
-    std::string s; s.resize(8);
-    fileIN >> s;
-    
-    file << x << " " << y << " " << z << " " << (s[0]=='0'? "1" : "-1") << std::endl;
-    file << x+1 << " " << y << " " << z << " " << (s[1]=='0'? "1" : "-1") << std::endl;
-    file << x+1 << " " << y << " " << z+1 << " " << (s[2]=='0'? "1" : "-1") << std::endl;
-    file << x << " " << y << " " << z+1 << " " << (s[3]=='0'? "1" : "-1") << std::endl;
-    file << x << " " << y << " " << z << " " << (s[4]=='0'? "1" : "-1") << std::endl;
-    file << x+1 << " " << y+1 << " " << z << " " << (s[5]=='0'? "1" : "-1") << std::endl;
-    file << x+1 << " " << y+1 << " " << z+1 << " " << (s[6]=='0'? "1" : "-1") << std::endl;
-    file << x << " " << y+1 << " " << z+1 << " " << (s[7]=='0'? "1" : "-1") << std::endl;
-    x+=2;
-    if(x >16){
-        x=0;
-        y+=2;
-    }
-
-  //  std::cout << s <<std::endl;
-
-
-    }
-
-              /*
-    0 0 0 -1
-    1 0 0 1
-    1 0 1 1
-    0 0 1 1
-
-    0 1 0 1
-    1 1 0 1
-    1 1 1 1
-    0 1 1 1
-    */
-    file.close();
-}
-
-
-// x-red
-// y-green
-//z-blue
