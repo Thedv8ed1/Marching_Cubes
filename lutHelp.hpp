@@ -400,44 +400,22 @@ void buildTriangulationTable(){
         int arr[12] = {0,1,2,3,4,5,6,7,8,9,10,11};
 
         for(int i = 0; i < 7; i++){ // for each mirror
-            for(int j = 0; j < 4; j++){ // for all x rot
-               if (processedTable[index] == false){
-                    for(int tri=0; tri < cases[c]->numOfTriangles; tri++){
-                        table[index].push_back(arr[cases[c]->stencil[3*tri]]);
-                        table[index].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
-                        table[index].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
+            for(int x = 0; x < 4; x++){ // for each x rot
+                for(int y = 0; y < 4; y++){ // for each y rot
+                    for(int z = 0; z < 4; z++){ // for each z rot
+                        if (processedTable[index] == false){           
+                            for(int tri=0; tri < cases[c]->numOfTriangles; tri++){
+                                table[index].push_back(arr[cases[c]->stencil[3*tri]]);
+                                table[index].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
+                                table[index].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
+                            }
+                            processedTable[index] = true;
+                        }
+                        rotateZ(arr,&index);
                     }
-                    processedTable[index] = true;
+                    rotateY(arr,&index);
                 }
                 rotateX(arr,&index);
-            }
-            for(int j = 0; j < 4; j++){// for all y rot
-                if (processedTable[index] == false){           
-                    for(int tri=0; tri < cases[c]->numOfTriangles; tri++){
-                        table[index].push_back(arr[cases[c]->stencil[3*tri]]);
-                        table[index].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
-                        table[index].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
-                    }
-                    processedTable[index] = true;
-                } 
-                rotateY(arr,&index);
-            }
-            for(int j = 0; j < 4; j++){// for all z rot
-                if (processedTable[index] == false){           
-                    for(int tri=0; tri < cases[c]->numOfTriangles; tri++){
-                        table[index].push_back(arr[cases[c]->stencil[3*tri]]);
-                        table[index].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
-                        table[index].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
-                    }
-                    processedTable[index] = true;
-                }
-                rotateZ(arr,&index);
-            }
-            for(int j = 0; j < 6; j++){// for all z rot
-
-            // rotate 4 x
-            // rotate 1 y
-            //rotate 4 x
             }
             index = cases[c]->index; resetCube(arr);
             if(i==0){mirrorX(arr,&index);}
