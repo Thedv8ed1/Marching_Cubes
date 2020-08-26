@@ -110,7 +110,7 @@ public:
 class case5 : public baseCase{
 public:
     case5(){
-        index = 7;
+        index = 14;
         numOfTriangles = 3;
         int c5Stencil[9] ={0,3,9,    3,9,11,    9,10,11};
         std::copy(c5Stencil,c5Stencil+9,stencil);
@@ -233,9 +233,9 @@ void resetCube(int arr[12]){
 /*
     ALL rotations rotate the cube counter-clockwise
 */
-void rotateY(int arr[12], unsigned int &vertIndex){
-    vertIndex = ((vertIndex>>1)&119) + // >> 7 6 5 3 2 1
-    ((vertIndex<<3)&136); // << 4 0
+void rotateY(int arr[12], unsigned int *vertIndex){
+    *vertIndex = ((*vertIndex>>1)&119) + // >> 7 6 5 3 2 1
+    ((*vertIndex<<3)&136); // << 4 0
 
     int tmp[4];
     for(int i = 0; i < 12; i++){
@@ -255,11 +255,11 @@ void rotateY(int arr[12], unsigned int &vertIndex){
     arr[11] = tmp[8];
 }
 
-void rotateZ(int arr[12], unsigned int &vertIndex){
-    vertIndex = ((vertIndex<<1)&130) +// << 6 0
-     ((vertIndex>>1)&20) + // >> 5 3
-      ((vertIndex>>4)&9) +  // >> 7 4
-      ((vertIndex<<4)&96) ;   // 2 1
+void rotateZ(int arr[12], unsigned int *vertIndex){
+    *vertIndex = ((*vertIndex<<1)&130) +// << 6 0
+     ((*vertIndex>>1)&20) + // >> 5 3
+      ((*vertIndex>>4)&9) +  // >> 7 4
+      ((*vertIndex<<4)&96) ;   // 2 1
     int tmp[12];
     for(int i = 0; i < 12; i++){
         tmp[i] = arr[i];
@@ -278,13 +278,13 @@ void rotateZ(int arr[12], unsigned int &vertIndex){
     arr[11] = tmp[6];
 }
 
-void rotateX(int arr[12], unsigned int &vertIndex){
-  vertIndex = ((vertIndex>>4)&3) + // >> 5 4
-   ((vertIndex<<4)&192) + // << 3 2
-    ((vertIndex>>3)&16)+ // >> 7
-    ((vertIndex>>1)&32)+ // >> 6
-    ((vertIndex<<3)&8) + // << 0
-    ((vertIndex<<1)&4); // << 1    
+void rotateX(int arr[12], unsigned int *vertIndex){
+  *vertIndex = ((*vertIndex>>4)&3) + // >> 5 4
+   ((*vertIndex<<4)&192) + // << 3 2
+    ((*vertIndex>>3)&16)+ // >> 7
+    ((*vertIndex>>1)&32)+ // >> 6
+    ((*vertIndex<<3)&8) + // << 0
+    ((*vertIndex<<1)&4); // << 1    
     int tmp[12];
     for(int i = 0; i < 12; i++){
         tmp[i] = arr[i];
@@ -304,9 +304,9 @@ void rotateX(int arr[12], unsigned int &vertIndex){
 
 }
 
-void mirrorY(int arr[12],unsigned int &vertIndex){
-    vertIndex = ((vertIndex<<4)&240) + // << 3 2 1 0
-     ((vertIndex>>4)&15); // >> 7 6 5 4
+void mirrorY(int arr[12],unsigned int *vertIndex){
+    *vertIndex = ((*vertIndex<<4)&240) + // << 3 2 1 0
+     ((*vertIndex>>4)&15); // >> 7 6 5 4
     
     int tmp[12];
     for(int i = 0; i < 12; i++){
@@ -327,11 +327,11 @@ void mirrorY(int arr[12],unsigned int &vertIndex){
     arr[11] = tmp[11];
 }
 
-void mirrorZ(int arr[12],unsigned int &vertIndex){
-    vertIndex = ((vertIndex>>3)&17) + // >> 7 3
-    ((vertIndex>>1)&34) + // >> 6 2
-    ((vertIndex<<1)&68) + // << 5 1
-    ((vertIndex<<3)&136); // << 0 4
+void mirrorZ(int arr[12],unsigned int *vertIndex){
+   * vertIndex = ((*vertIndex>>3)&17) + // >> 7 3
+    ((*vertIndex>>1)&34) + // >> 6 2
+    ((*vertIndex<<1)&68) + // << 5 1
+    ((*vertIndex<<3)&136); // << 0 4
 
     int tmp[12];
 
@@ -353,9 +353,9 @@ void mirrorZ(int arr[12],unsigned int &vertIndex){
     arr[11] = tmp[8];
 }
 
-void mirrorX(int arr[12], unsigned int &vertIndex){
-    vertIndex = ((vertIndex>>1)&85) + // >> 7 5 3 0
-     ((vertIndex<<1)&170); // << 6 4 2 0
+void mirrorX(int arr[12], unsigned int *vertIndex){
+    *vertIndex = ((*vertIndex>>1)&85) + // >> 7 5 3 0
+     ((*vertIndex<<1)&170); // << 6 4 2 0
 
     int tmp[12];
     for(int i = 0; i < 12; i++){
@@ -381,6 +381,8 @@ void mirrorX(int arr[12], unsigned int &vertIndex){
 void buildTriangulationTable(){
     std::vector<bool> processedTable;
     processedTable.resize(256,false);
+    std::vector<std::vector<int> > table;
+    for(int i = 0; i < 256; i++){table.push_back(std::vector<int>());}
     
     std::fstream file;
     file.open("Triangulation.txt",std::fstream::out);
@@ -397,58 +399,65 @@ void buildTriangulationTable(){
         unsigned int index = cases[c]->index;
         int arr[12] = {0,1,2,3,4,5,6,7,8,9,10,11};
 
-        for(int i = 0; i < 6; i++){ // for each mirror
+        for(int i = 0; i < 7; i++){ // for each mirror
             for(int j = 0; j < 4; j++){ // for all x rot
                if (processedTable[index] == false){
-                    file << "/*" << index << "*/ ";           
                     for(int tri=0; tri < cases[c]->numOfTriangles; tri++){
-                        file << arr[cases[c]->stencil[3*tri]] << " ";
-                        file << arr[cases[c]->stencil[3*tri+1]] << " ";
-                        file << arr[cases[c]->stencil[3*tri+2]] << " ";
+                        table[index].push_back(arr[cases[c]->stencil[3*tri]]);
+                        table[index].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
+                        table[index].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
                     }
-                    file << std::endl;
                     processedTable[index] = true;
                 }
-                rotateX(arr,index);
+                rotateX(arr,&index);
             }
             for(int j = 0; j < 4; j++){// for all y rot
-                if (processedTable[index] == false){
-                    file << "/*" << index << "*/ ";           
+                if (processedTable[index] == false){           
                     for(int tri=0; tri < cases[c]->numOfTriangles; tri++){
-                        file << arr[cases[c]->stencil[3*tri]] << " ";
-                        file << arr[cases[c]->stencil[3*tri+1]] << " ";
-                        file << arr[cases[c]->stencil[3*tri+2]] << " ";
+                        table[index].push_back(arr[cases[c]->stencil[3*tri]]);
+                        table[index].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
+                        table[index].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
                     }
-                    file << std::endl;
                     processedTable[index] = true;
                 } 
-                rotateY(arr,index);
+                rotateY(arr,&index);
             }
             for(int j = 0; j < 4; j++){// for all z rot
-                if (processedTable[index] == false){
-                    file << "/*" << index << "*/ ";           
+                if (processedTable[index] == false){           
                     for(int tri=0; tri < cases[c]->numOfTriangles; tri++){
-                        file << arr[cases[c]->stencil[3*tri]] << " ";
-                        file << arr[cases[c]->stencil[3*tri+1]] << " ";
-                        file << arr[cases[c]->stencil[3*tri+2]] << " ";
+                        table[index].push_back(arr[cases[c]->stencil[3*tri]]);
+                        table[index].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
+                        table[index].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
                     }
-                    file << std::endl;
                     processedTable[index] = true;
                 }
-                rotateZ(arr,index);
+                rotateZ(arr,&index);
+            }
+            for(int j = 0; j < 6; j++){// for all z rot
+
+            // rotate 4 x
+            // rotate 1 y
+            //rotate 4 x
             }
             index = cases[c]->index; resetCube(arr);
-            if(i==0){mirrorX(arr,index);}
-            if(i==1){mirrorY(arr,index);}
-            if(i==2){mirrorZ(arr,index);}
-            if(i==3){mirrorX(arr,index);}
-            if(i==4){mirrorX(arr,index);}
-            if(i==5){mirrorY(arr,index);}
+            if(i==0){mirrorX(arr,&index);}
+            if(i==1){mirrorY(arr,&index);}
+            if(i==2){mirrorZ(arr,&index);}
+            if(i==3){mirrorX(arr,&index);mirrorY(arr,&index);}
+            if(i==4){mirrorX(arr,&index);mirrorZ(arr,&index);}
+            if(i==5){mirrorY(arr,&index);mirrorZ(arr,&index);}
+            if(i==6){mirrorX(arr,&index);mirrorY(arr,&index);mirrorZ(arr,&index);}
+
         }
     }   
-    for(int i = 1; i <processedTable.size(); i++){
-        if(processedTable[i] == false){std::cout << i << std::endl;}
-    }        
+    
+    for(int i = 0; i < table.size(); i++){
+        file << "/*" << i << "/* ";
+        for(int j = 0; j < table[i].size(); j++){
+            file << table[i][j] << ", ";
+        }
+        file << std::endl;
+    }
     file.close();
 }
 
