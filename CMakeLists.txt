@@ -8,5 +8,5 @@ find_package(GLUT REQUIRED)
 find_package(GLEW REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS})
 
-add_executable(shaders main.cpp application.cpp gl_arcball.cpp gl_viewer.cpp obj.cpp, grid.cpp, surface.cpp)
+add_executable(shaders main.cpp application.cpp gl_arcball.cpp gl_viewer.cpp obj.cpp, grid.cpp, surface.cpp, lutHelp.hpp)
 target_link_libraries(shaders ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARY})

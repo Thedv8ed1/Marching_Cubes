@@ -195,6 +195,11 @@ void application::load_grid(char *fileName){
 
   surface.load_surface_data(fileName);
 
+  /*
+    TODO: MOVE THIS INTO ITS OWN FUNCTION
+  */
+  surface.marching_cube();
+
 }
 
 void draw_obj(obj *o, int material_index) {
