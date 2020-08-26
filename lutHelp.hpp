@@ -37,18 +37,22 @@ x----0---x
 
 /*
 
- cases are built by moving in a counter-clockwise direction taking
- the first vertex encounterd and adding the other verticies in order
+ cases are built by moving in a counter-clockwise direction taking the first
+ vertex encounterd and adding the other verticies of that triangle in order
 
 */
 
 /*
-    TRIANGLE PATTERNS
+    TRIANGLE PATTERN EXAMPLES
         1     1         1
 CASE 1: 0 1 2 3 4 5 6 7 8 9 10 11
 
               2         2 2
           1   1           1
+CASE 2: 0 1 2 3 4 5 6 7 8 9 10 11
+
+                2 2       2
+        1     1         1
 CASE 2: 0 1 2 3 4 5 6 7 8 9 10 11
 */
 
@@ -64,7 +68,7 @@ baseCase(){}
         }
         
     }
-    int index;
+    uint8_t index;
     int numOfTriangles;
     int stencil[12];
 };
@@ -377,7 +381,6 @@ void mirrorX(int arr[12], unsigned int *vertIndex){
 }
 
 
-
 void buildTriangulationTable(){
     std::vector<bool> processedTable;
     processedTable.resize(256,false);
@@ -411,6 +414,16 @@ void buildTriangulationTable(){
                             }
                             processedTable[index] = true;
                         }
+                        // do complement rotations
+                        uint8_t t = ~index;
+                        if (processedTable[(int)t] == false){ 
+                            for(int tri=0; tri < cases[c]->numOfTriangles; tri++){
+                                table[(int)t].push_back(arr[cases[c]->stencil[3*tri]]);
+                                table[(int)t].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
+                                table[(int)t].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
+                            }
+                            processedTable[(int)t] = true;   
+                        }
                         rotateZ(arr,&index);
                     }
                     rotateY(arr,&index);
@@ -428,14 +441,19 @@ void buildTriangulationTable(){
 
         }
     }   
-    
+    file << "std::vector<std::vector<int> > triangleTable = {" << std::endl;
     for(int i = 0; i < table.size(); i++){
-        file << "/*" << i << "/* ";
+        file << "/*" << i << "/* {";
         for(int j = 0; j < table[i].size(); j++){
             file << table[i][j] << ", ";
         }
+        if(i != 0 && i != 255){
+            file.seekp(file.tellp()-2);
+        }
+        file << "},";
         file << std::endl;
     }
+    file << "};";
     file.close();
 }
 
