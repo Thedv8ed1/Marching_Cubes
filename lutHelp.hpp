@@ -443,7 +443,7 @@ void buildTriangulationTable(){
     }   
     file << "std::vector<std::vector<int> > triangleTable = {" << std::endl;
     for(int i = 0; i < table.size(); i++){
-        file << "/*" << i << "/* {";
+        file << "/*" << i << "*/ {";
         for(int j = 0; j < table[i].size(); j++){
             file << table[i][j] << ", ";
         }
