@@ -5,6 +5,17 @@
 #include <string>
 #include <cstring>
 
+/*
+example: 01010101
+every bit flip means we are crossing the isosurface and we need a triangle to representing
+the maximum trianges are the amount of bit flips
+there are 5 maximim bit flips so there are 5 triangles
+
+rolling the bits accounts for rotation
+8 bit rolls sends us back to the original value
+
+*/
+
 Surface::Surface(){
 
 }
@@ -13,64 +24,73 @@ Surface::~Surface(){
     
 }
 
-void Surface::load_dimensions(int height, int width,int depth){
-    this->height = height;
-    this->width = width;
-    this->depth = depth;
-
-
-}
-
 void Surface::load_surface_data(char *fileName){
 
     std::fstream file;
     file.open(fileName);
     std::string s;
     
-  do{
+    do{  // get surface dimentions and skip over comments
+        string line, search;
 
-    std::getline(file, s);
+        // read commentaries
+        std::getline(file, line);
 
-  }
-  while(s[0] == '#');
-    int xIN, yIN, zIN;
-/*
-  for (int z = 0; z < depth; z+=1){
-    for (int y = 0; y < height; y+=1){
-      for (int x = 0; x < width; x+=1){
-        file >> s;// std::cout << s << " ";
-        xIN = std::stoi(s);
-        file >> s; //std::cout << s << " ";
-        yIN = std::stoi(s);
-        file >> s; //std::cout << s << " ";
-        zIN = std::stoi(s);
-        file >> s; //std::cout << s << " ";
-        points[xIN][yIN][zIN] = std::stod(s);
-      }
-      //std::cout << std::endl;
+        search = "width";
+        if (line.find(search) != string::npos)
+            height = atoi(line.substr(line.find(search) + search.length()).c_str());
+
+        search = "height";
+        if (line.find(search) != string::npos)
+            width = atoi(line.substr(line.find(search) + search.length()).c_str());
+        
+        search = "depth";
+        if (line.find(search) != string::npos)
+            depth = atoi(line.substr(line.find(search) + search.length()).c_str());
+        s = line;
     }
-  }
-  */
+    while(s[0] == '#');
+    
+    int xIN, yIN, zIN;
+    /*
+        Create the 3d array of the size spcified in the file
+        Assume all points are outside a surface
+    */
+    points = new double**[width];
+    for (int x = 0; x < width; x+=1){
+        points[x] = new double*[height];
+        for (int y = 0; y < height; y+=1){
+            points[x][y] = new double[depth];
+            for (int z = 0; z < depth; z+=1){
+                points[x][y][z] = INT_MAX;
+            }
+        }
+    }
 
+    /*
+        Load the surface data
+    */
+    for (int x = 0; x < width; x+=1){
+        for (int y = 0; y < height; y+=1){
+            for (int z = 0; z < depth; z+=1){
+                file >> s;
+                xIN = std::stoi(s);
+                file >> s;
+                yIN = std::stoi(s);
+                file >> s;
+                zIN = std::stoi(s);
+                file >> s;
+                if(xIN > width || yIN > height || zIN > depth){continue;} // if a point is greater than a specified dimention skip over it
+                points[xIN][yIN][zIN] = std::stod(s);               
+            }
+        }
+    }
   file.close();
-
-  generate_triangles();
 }
 
-int Surface::get_index(double *vertValues){
-  int index = 0;
-  for(int i = 7; i >= 0; i--){
-      vertValues[i] > 0 ? index = index << 1 : index = (index<<1)+1;
-  }
- 
-  return index;
-}
 
-void Surface::generate_triangles(){
-
-    int index;
+void Surface::marching_cube(){
     Cube cube;
-
     /*
     Iterate over the 3d matrix that holds the weight at each point
     */
@@ -88,21 +108,43 @@ void Surface::generate_triangles(){
                 cube.values[5] = points[i+1][j+1][k];     cube.verticies[5] = Point{i+1,j+1,k};
                 cube.values[6] = points[i+1][j+1][k+1];   cube.verticies[6] = Point{i+1,j+1,k+1};
                 cube.values[7] = points[i  ][j+1][k+1];   cube.verticies[7] = Point{i,  j+1,k+1};   
-
-                // get the index of of the cube from a look up table
-                index = get_index(cube.values);
-                if(index > 127){
-                    index = 255-index;
-                }
-                if(index == 0) 
-                    continue;
-                    
-                Point xyz[3];
-
+                generate_triangles(cube);
             }
         }
-
     }
+}
+
+int Surface::get_index(double *vertValues){
+  int index = 0;
+  for(int i = 7; i >= 0; i--){
+      vertValues[i] > 0 ? index = index << 1 : index = (index<<1)+1;
+  }
+  return index;
+}
+
+void Surface::generate_triangles(Cube cube){
+       /* 
+    double arr[8] = {1,1,1,1,1,1,1,1};
+    for(int i = 0; i < 256; i++){
+        for(int j = 0; j < 8;j++){
+            if(((i>>j)&1) == 0){
+                arr[j] = 1;
+            }else{
+                arr[j] = -1;
+            }
+        }
+        std::cout << get_index(arr ) << std::endl;
+    }
+    exit(0);*/
+    
+    int index; // holds the case of the cube
+    
+    // get the index of of the cube from a look up table
+    index = get_index(cube.values);
+    if(index == 0) 
+        
+    Point edgePoints[12];
+    
 }
 void Surface::render_surface(){
   for(int i = 0; i < triangles.size(); i++){
