@@ -29,12 +29,12 @@ void Ttable();
 
 int main(int argc, char* argv[])
 {
-     buildTriangulationTable();
-    return 0;
+   // buildTriangulationTable();
+    //return 0;
 
    circle();
-    Etable(); 
-    Ttable();
+    //Etable(); 
+    //Ttable();
   //  return 0;
     int width = 640;
     int height = 480;
