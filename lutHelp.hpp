@@ -82,7 +82,6 @@ public:
         std::copy(c1Stencil,c1Stencil+3,stencil);
     }
 };
-
 class case2 : public baseCase{
 public:
     case2(){
