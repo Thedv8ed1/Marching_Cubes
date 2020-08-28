@@ -26,11 +26,12 @@ void Ttable();
         3993, 3219, 3482, 2710, 2975, 2197, 2460, 1692, 1941, 1183, 1430, 666, 915, 153, 400, 3840, 
         3593, 3331, 3082, 2822, 2575, 2309, 2060, 1804, 1541, 1295, 1030, 778, 515, 265, 0, };
 
+/* 34 and 9 are reversed*/
+int main(int argc, char* argv[]){
 
-int main(int argc, char* argv[])
-{
-   // buildTriangulationTable();
-    //return 0;
+   
+    buildTriangulationTable();
+   // return 0;
 
    circle();
     //Etable(); 
@@ -57,7 +58,7 @@ void circle(){
     file << "# Dimentions are for number of points NOT CUBES" <<
     "\n# width " << width <<
     "\n# height " << height<<
-    "\n# depth " << depth << std::endl;
+    "\n# depth " << depth << std::endl << std::endl;
     int shiftAmt = 10;
     for(int x = 0; x < 20; x++){
         for(int y = 0; y < 20; y++){
@@ -193,42 +194,6 @@ void Ttable(){
         fileOUT << std::endl;
         }
 fileOUT.close();
-    exit(0);
-    std::fstream fileIN;
-    fileIN.open("table.txt",std::fstream::in);
-
-
-    //std::fstream fileOUT;
-    fileOUT.open("binTableIndex.txt",std::fstream::out);
-    int vertexCount;
-    for(int i = 0; i < 256; i++){
-       // fileIN >> std::stoi(vertexCount);
-        int isMod3 = 0; // every 3 edges is a triangle
-        for(int j = 0; j < 12; j++){
-            if((vertexCount>>j)&1 ==1){
-                isMod3++;
-                fileOUT << j << ", ";
-            }
-        }
-        if(isMod3 %3){
-
-        }
-     for(int j = 8; j >= 0;j--){
-            fileOUT << ((i>>(j))&1);  
-        }
-        fileOUT << " ";
-                //if(i>0 && i%16 == 0){fileOUT << std::endl;}
-
-}
-
-    int i = 0;    
-   // while(!fileIN.eof()){
-
-    //}
-
-
-    fileIN.close();
-    fileOUT.close();
 
 }
 

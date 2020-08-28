@@ -201,7 +201,7 @@ public:
 class case14 : public baseCase{
 public:
     case14(){
-        index = 142;
+        index = 142; 
         numOfTriangles = 4;
         int c14Stencil[12] ={0,3,7,    0,7,10,    0,9,10,    6,7,10};
         std::copy(c14Stencil,c14Stencil+12,stencil);
@@ -213,12 +213,6 @@ public:
     0,1,2,3  4,5,6,7  8,9,10,11
 
 */
-
-/*
-    TODO: make the method of edges match the method of verticies
-*/
-
-
 
 void resetCube(int arr[12]){
     for(int i = 0; i < 12; i++){
@@ -237,32 +231,32 @@ void resetCube(int arr[12]){
     ALL rotations rotate the cube counter-clockwise
 */
 void rotateY(int arr[12], uint8_t *vertIndex){
-    *vertIndex = ((*vertIndex<<1)&2) + // 0
-                 ((*vertIndex<<1)&4) + // 1
-                 ((*vertIndex<<1)&8) + // 2
-                 ((*vertIndex>>3)&1) + // 3
-                 ((*vertIndex<<1)&32) + // 4
-                 ((*vertIndex<<1)&64) + // 5
-                 ((*vertIndex<<1)&128) + // 6
-                 ((*vertIndex>>3)&16); // 7
+    *vertIndex = ((*vertIndex<<3)&8) + // 0
+                 ((*vertIndex>>1)&1) + // 1
+                 ((*vertIndex>>1)&2) + // 2
+                 ((*vertIndex>>1)&4) + // 3
+                 ((*vertIndex<<3)&128) + // 4
+                 ((*vertIndex>>1)&16) + // 5
+                 ((*vertIndex>>1)&64) + // 6
+                 ((*vertIndex>>1)&32); // 7
                  
 
     int tmp[12];
     for(int i = 0; i < 12; i++){
         tmp[i] = arr[i];
     }
-    arr[0] = tmp[1];
-    arr[1] = tmp[2];
-    arr[2] = tmp[3];
-    arr[3] = tmp[0];
-    arr[4] = tmp[5];
-    arr[5] = tmp[6];
-    arr[6] = tmp[7];
-    arr[7] = tmp[4];
-    arr[8] = tmp[9];
-    arr[9] = tmp[10];
-    arr[10] = tmp[11];
-    arr[11] = tmp[8];
+    arr[0] = tmp[3];
+    arr[1] = tmp[0];
+    arr[2] = tmp[1];
+    arr[3] = tmp[2];
+    arr[4] = tmp[7];
+    arr[5] = tmp[4];
+    arr[6] = tmp[5];
+    arr[7] = tmp[6];
+    arr[8] = tmp[11];
+    arr[9] = tmp[8];
+    arr[10] = tmp[9];
+    arr[11] = tmp[10];
 }
 
 void rotateZ(int arr[12], uint8_t *vertIndex){ 
@@ -304,8 +298,6 @@ void rotateX(int arr[12], uint8_t *vertIndex){
                ((*vertIndex>>4)&4) + // 6
                ((*vertIndex>>4)&8); // 7  
 
-
-
     int tmp[12];
     for(int i = 0; i < 12; i++){
         tmp[i] = arr[i];
@@ -322,7 +314,6 @@ void rotateX(int arr[12], uint8_t *vertIndex){
     arr[9] = tmp[5];
     arr[10] = tmp[1];
     arr[11] = tmp[3];
-
 }
 
 void mirrorY(int arr[12],uint8_t *vertIndex){
@@ -425,21 +416,22 @@ void buildTriangulationTable(){
 
     std::vector<baseCase *> cases;
     cases.push_back(new case1); cases.push_back(new case8); 
-    cases.push_back(new case2); cases.push_back(new case9);
+    cases.push_back(new case2); // <<< this is the problem
+    cases.push_back(new case9);
     cases.push_back(new case3); cases.push_back(new case10);
     cases.push_back(new case4); cases.push_back(new case11);
     cases.push_back(new case5); cases.push_back(new case12);
     cases.push_back(new case6); cases.push_back(new case13);
     cases.push_back(new case7); cases.push_back(new case14);
-    for(uint8_t c = 0; c<cases.size(); c++){
-        uint8_t index = cases[c]->index;
-        int arr[12] = {0,1,2,3,4,5,6,7,8,9,10,11};
+    for(uint8_t c = 0; c<cases.size(); c++){ // for every case
+        uint8_t index = cases[c]->index; // get the index of the case
+        int arr[12] = {0,1,2,3,4,5,6,7,8,9,10,11}; // set the default cube edges
 
         for(int i = 0; i < 7; i++){ // for each mirror
             for(int x = 0; x < 4; x++){ // for each x rot
                 for(int y = 0; y < 4; y++){ // for each y rot
                     for(int z = 0; z < 4; z++){ // for each z rot
-                        if (processedTable[index] == false){           
+                        if (processedTable[(int)index] == false){           
                             for(int tri=0; tri < cases[c]->numOfTriangles; tri++){
                                 table[index].push_back(arr[cases[c]->stencil[3*tri]]);
                                 table[index].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
@@ -447,7 +439,7 @@ void buildTriangulationTable(){
                             }
                             processedTable[index] = true;
                         }
-                        if(index == 0){std::cout << i << " " << x << " " << y << " " << z; exit(0);}
+                     
                         // do complement rotations
                         uint8_t t = ~index;
                         if (processedTable[(int)t] == false){ 
@@ -482,7 +474,7 @@ void buildTriangulationTable(){
             file << table[i][j] << ", ";
         }
         if(i != 0 && i != 255){
-            file.seekp(file.tellp()-2);
+            //file.seekp(file.tellp()-2);
         }
         file << "},";
         file << std::endl;
