@@ -96,7 +96,7 @@ public:
     case3(){
         index = 33;
         numOfTriangles = 2;
-        int c3Stencil[6] ={0,3,8,    5,6,9};
+        int c3Stencil[6] ={0,3,8,    4,5,9};
         std::copy(c3Stencil,c3Stencil+6,stencil);
     } 
 };
@@ -174,7 +174,7 @@ public:
     case11(){
         index = 77;
         numOfTriangles = 4;
-        int c11Stencil[12] ={0,1,5,    0,6,10,    0,6,8,    6,7,8};
+        int c11Stencil[12] ={0,1,5,    0,5,11,    0,8,11,    6,5,11};
         std::copy(c11Stencil,c11Stencil+12,stencil);
     }
      
@@ -236,11 +236,18 @@ void resetCube(int arr[12]){
 /*
     ALL rotations rotate the cube counter-clockwise
 */
-void rotateY(int arr[12], unsigned int *vertIndex){
-    *vertIndex = ((*vertIndex>>1)&119) + // >> 7 6 5 3 2 1
-    ((*vertIndex<<3)&136); // << 4 0
+void rotateY(int arr[12], uint8_t *vertIndex){
+    *vertIndex = ((*vertIndex<<1)&2) + // 0
+                 ((*vertIndex<<1)&4) + // 1
+                 ((*vertIndex<<1)&8) + // 2
+                 ((*vertIndex>>3)&1) + // 3
+                 ((*vertIndex<<1)&32) + // 4
+                 ((*vertIndex<<1)&64) + // 5
+                 ((*vertIndex<<1)&128) + // 6
+                 ((*vertIndex>>3)&16); // 7
+                 
 
-    int tmp[4];
+    int tmp[12];
     for(int i = 0; i < 12; i++){
         tmp[i] = arr[i];
     }
@@ -258,11 +265,17 @@ void rotateY(int arr[12], unsigned int *vertIndex){
     arr[11] = tmp[8];
 }
 
-void rotateZ(int arr[12], unsigned int *vertIndex){
-    *vertIndex = ((*vertIndex<<1)&130) +// << 6 0
-     ((*vertIndex>>1)&20) + // >> 5 3
-      ((*vertIndex>>4)&9) +  // >> 7 4
-      ((*vertIndex<<4)&96) ;   // 2 1
+void rotateZ(int arr[12], uint8_t *vertIndex){ 
+    *vertIndex = ((*vertIndex<<4)&16) + // 0
+                 ((*vertIndex>>1)&1) + // 1
+                 ((*vertIndex<<1)&8) + // 2
+                 ((*vertIndex<<4)&128) + // 3
+                 ((*vertIndex<<1)&32) + // 4
+                 ((*vertIndex>>4)&2) + // 5
+                 ((*vertIndex>>4)&4) + // 6
+                 ((*vertIndex>>1)&64); // 7
+    
+    
     int tmp[12];
     for(int i = 0; i < 12; i++){
         tmp[i] = arr[i];
@@ -281,13 +294,18 @@ void rotateZ(int arr[12], unsigned int *vertIndex){
     arr[11] = tmp[6];
 }
 
-void rotateX(int arr[12], unsigned int *vertIndex){
-  *vertIndex = ((*vertIndex>>4)&3) + // >> 5 4
-   ((*vertIndex<<4)&192) + // << 3 2
-    ((*vertIndex>>3)&16)+ // >> 7
-    ((*vertIndex>>1)&32)+ // >> 6
-    ((*vertIndex<<3)&8) + // << 0
-    ((*vertIndex<<1)&4); // << 1    
+void rotateX(int arr[12], uint8_t *vertIndex){  
+  *vertIndex = ((*vertIndex<<4)&16) + // 0
+               ((*vertIndex<<4)&32) + // 1
+               ((*vertIndex>>1)&2) + // 2
+               ((*vertIndex>>3)&1) + // 3
+               ((*vertIndex<<3)&128) + // 4
+               ((*vertIndex<<1)&64) + // 5
+               ((*vertIndex>>4)&4) + // 6
+               ((*vertIndex>>4)&8); // 7  
+
+
+
     int tmp[12];
     for(int i = 0; i < 12; i++){
         tmp[i] = arr[i];
@@ -307,9 +325,15 @@ void rotateX(int arr[12], unsigned int *vertIndex){
 
 }
 
-void mirrorY(int arr[12],unsigned int *vertIndex){
-    *vertIndex = ((*vertIndex<<4)&240) + // << 3 2 1 0
-     ((*vertIndex>>4)&15); // >> 7 6 5 4
+void mirrorY(int arr[12],uint8_t *vertIndex){
+    *vertIndex = ((*vertIndex<<4)&16) + // 0
+                 ((*vertIndex<<4)&32) + // 1
+                 ((*vertIndex<<4)&64) + // 2
+                 ((*vertIndex<<4)&128) + // 3
+                 ((*vertIndex>>4)&1) + // 4
+                 ((*vertIndex>>4)&2) + // 5
+                 ((*vertIndex>>4)&4) + // 6
+                 ((*vertIndex>>4)&8); // 7 
     
     int tmp[12];
     for(int i = 0; i < 12; i++){
@@ -330,11 +354,15 @@ void mirrorY(int arr[12],unsigned int *vertIndex){
     arr[11] = tmp[11];
 }
 
-void mirrorZ(int arr[12],unsigned int *vertIndex){
-   * vertIndex = ((*vertIndex>>3)&17) + // >> 7 3
-    ((*vertIndex>>1)&34) + // >> 6 2
-    ((*vertIndex<<1)&68) + // << 5 1
-    ((*vertIndex<<3)&136); // << 0 4
+void mirrorZ(int arr[12], uint8_t *vertIndex){
+   *vertIndex = ((*vertIndex<<3)&8) + // 0
+                ((*vertIndex<<1)&4) + // 1
+                ((*vertIndex>>1)&2) + // 2
+                ((*vertIndex>>3)&1) + // 3
+                ((*vertIndex<<3)&128) + // 4
+                ((*vertIndex<<1)&64) + // 5
+                ((*vertIndex>>1)&32) + // 6
+                ((*vertIndex>>3)&16); // 7 
 
     int tmp[12];
 
@@ -356,9 +384,15 @@ void mirrorZ(int arr[12],unsigned int *vertIndex){
     arr[11] = tmp[8];
 }
 
-void mirrorX(int arr[12], unsigned int *vertIndex){
-    *vertIndex = ((*vertIndex>>1)&85) + // >> 7 5 3 0
-     ((*vertIndex<<1)&170); // << 6 4 2 0
+void mirrorX(int arr[12], uint8_t *vertIndex){
+    *vertIndex = ((*vertIndex<<1)&2) + // 0
+                 ((*vertIndex>>1)&1) + // 1
+                 ((*vertIndex<<1)&8) + // 2
+                 ((*vertIndex>>1)&4) + // 3
+                 ((*vertIndex<<1)&32) + // 4
+                 ((*vertIndex>>1)&16) + // 5
+                 ((*vertIndex<<1)&128) + // 6
+                 ((*vertIndex>>1)&64); // 7 
 
     int tmp[12];
     for(int i = 0; i < 12; i++){
@@ -397,8 +431,8 @@ void buildTriangulationTable(){
     cases.push_back(new case5); cases.push_back(new case12);
     cases.push_back(new case6); cases.push_back(new case13);
     cases.push_back(new case7); cases.push_back(new case14);
-    for(int c = 0; c<cases.size(); c++){
-        unsigned int index = cases[c]->index;
+    for(uint8_t c = 0; c<cases.size(); c++){
+        uint8_t index = cases[c]->index;
         int arr[12] = {0,1,2,3,4,5,6,7,8,9,10,11};
 
         for(int i = 0; i < 7; i++){ // for each mirror
@@ -413,6 +447,7 @@ void buildTriangulationTable(){
                             }
                             processedTable[index] = true;
                         }
+                        if(index == 0){std::cout << i << " " << x << " " << y << " " << z; exit(0);}
                         // do complement rotations
                         uint8_t t = ~index;
                         if (processedTable[(int)t] == false){ 
