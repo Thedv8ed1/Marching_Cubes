@@ -140,7 +140,7 @@ void application::draw_event() {
   glPopMatrix();
 
   // draw the grid
-  grid.render();
+  //grid.render();
   //grid.renderAxis();
 
   surface.render_surface();
@@ -189,11 +189,16 @@ void application::keyboard_event(unsigned char key, int x, int y) {
 void application::load_grid(char *fileName){
   int x,y,z;
 
-  grid.load_dimensions(2,2,2);
 
-  grid.create_grid();
 
   surface.load_surface_data(fileName);
+  grid.load_dimensions(
+    surface.width,
+    surface.height,
+    surface.depth
+  );
+  grid.create_grid();
+
 
   /*
     TODO: MOVE THIS INTO ITS OWN FUNCTION

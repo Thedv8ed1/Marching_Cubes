@@ -46,12 +46,11 @@ class Surface{
 
     void render_surface();
 
-   double*** points;
+    double*** points;
 
-
+    int width,height,depth;
     std::vector<Triangle> triangles;
     private:
-    int width,height,depth;
 
     int edgeTable[256] = {
         0, 265, 515, 778, 1030, 1295, 1541, 1804, 2060, 2309, 2575, 2822, 3082, 3331, 3593, 3840, 400, 

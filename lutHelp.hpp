@@ -209,7 +209,7 @@ public:
 };
 /*
     A 12 element array symbolizes the cube
-    Each group of 4 is a side. The group are arranged as:   bot  top  middle
+    Each group of 4 is a side. The default is arranged as:   bot  top  middle
     0,1,2,3  4,5,6,7  8,9,10,11
 
 */
@@ -229,17 +229,48 @@ void resetCube(int arr[12]){
 
 /*
     ALL rotations rotate the cube counter-clockwise
+
 */
-void rotateY(int arr[12], uint8_t *vertIndex){
-    *vertIndex = ((*vertIndex<<3)&8) + // 0
-                 ((*vertIndex>>1)&1) + // 1
-                 ((*vertIndex>>1)&2) + // 2
-                 ((*vertIndex>>1)&4) + // 3
-                 ((*vertIndex<<3)&128) + // 4
-                 ((*vertIndex>>1)&16) + // 5
-                 ((*vertIndex>>1)&64) + // 6
-                 ((*vertIndex>>1)&32); // 7
-                 
+void rotateX(int arr[12], uint8_t *vertIndex){               
+    // shift vertical
+    *vertIndex = ((*vertIndex<<4)&16) + // 0
+               ((*vertIndex<<4)&32) + // 1
+               ((*vertIndex>>1)&2) + // 2
+               ((*vertIndex>>3)&1) + // 3
+               ((*vertIndex<<3)&128) + // 4
+               ((*vertIndex<<1)&64) + // 5
+               ((*vertIndex>>4)&4) + // 6
+               ((*vertIndex>>4)&8); // 7 
+
+    int tmp[12];
+    for(int i = 0; i < 12; i++){
+        tmp[i] = arr[i];
+    }
+    // vertical
+    arr[0] = tmp[4];
+    arr[1] = tmp[9];
+    arr[2] = tmp[0];
+    arr[3] = tmp[8];
+    arr[4] = tmp[6];
+    arr[5] = tmp[10];
+    arr[6] = tmp[2];
+    arr[7] = tmp[11];
+    arr[8] = tmp[7];
+    arr[9] = tmp[5];
+    arr[10] = tmp[1];
+    arr[11] = tmp[3];    
+}
+
+void rotateY(int arr[12], uint8_t *vertIndex){              
+    *vertIndex = (((*vertIndex)<<3)&8) + // 0
+                 (((*vertIndex)>>1)&1) + // 1
+                 (((*vertIndex)>>1)&2) + // 2
+                 (((*vertIndex)>>1)&4) + // 3
+                 (((*vertIndex)<<3)&128) + // 4
+                 (((*vertIndex)>>1)&16) + // 5
+                 (((*vertIndex)>>1)&32) + // 6
+                 (((*vertIndex)>>1)&64); // 7
+
 
     int tmp[12];
     for(int i = 0; i < 12; i++){
@@ -256,11 +287,11 @@ void rotateY(int arr[12], uint8_t *vertIndex){
     arr[8] = tmp[11];
     arr[9] = tmp[8];
     arr[10] = tmp[9];
-    arr[11] = tmp[10];
+    arr[11] = tmp[10];    
 }
 
 void rotateZ(int arr[12], uint8_t *vertIndex){ 
-    *vertIndex = ((*vertIndex<<4)&16) + // 0
+     *vertIndex = ((*vertIndex<<4)&16) + // 0
                  ((*vertIndex>>1)&1) + // 1
                  ((*vertIndex<<1)&8) + // 2
                  ((*vertIndex<<4)&128) + // 3
@@ -269,11 +300,11 @@ void rotateZ(int arr[12], uint8_t *vertIndex){
                  ((*vertIndex>>4)&4) + // 6
                  ((*vertIndex>>1)&64); // 7
     
-    
     int tmp[12];
     for(int i = 0; i < 12; i++){
         tmp[i] = arr[i];
     }
+    // horizontal    
     arr[0] = tmp[8];
     arr[1] = tmp[3];
     arr[2] = tmp[11];
@@ -288,32 +319,33 @@ void rotateZ(int arr[12], uint8_t *vertIndex){
     arr[11] = tmp[6];
 }
 
-void rotateX(int arr[12], uint8_t *vertIndex){  
-  *vertIndex = ((*vertIndex<<4)&16) + // 0
-               ((*vertIndex<<4)&32) + // 1
-               ((*vertIndex>>1)&2) + // 2
-               ((*vertIndex>>3)&1) + // 3
-               ((*vertIndex<<3)&128) + // 4
-               ((*vertIndex<<1)&64) + // 5
-               ((*vertIndex>>4)&4) + // 6
-               ((*vertIndex>>4)&8); // 7  
+void mirrorX(int arr[12], uint8_t *vertIndex){
+    *vertIndex = ((*vertIndex<<1)&2) + // 0
+                 ((*vertIndex>>1)&1) + // 1
+                 ((*vertIndex<<1)&8) + // 2
+                 ((*vertIndex>>1)&4) + // 3
+                 ((*vertIndex<<1)&32) + // 4
+                 ((*vertIndex>>1)&16) + // 5
+                 ((*vertIndex<<1)&128) + // 6
+                 ((*vertIndex>>1)&64); // 7 
 
     int tmp[12];
     for(int i = 0; i < 12; i++){
         tmp[i] = arr[i];
     }
-    arr[0] = tmp[4];
-    arr[1] = tmp[9];
-    arr[2] = tmp[0];
-    arr[3] = tmp[8];
-    arr[4] = tmp[6];
-    arr[5] = tmp[10];
-    arr[6] = tmp[2];
-    arr[7] = tmp[11];
-    arr[8] = tmp[7];
-    arr[9] = tmp[5];
-    arr[10] = tmp[1];
-    arr[11] = tmp[3];
+
+    arr[0] = tmp[0];
+    arr[1] = tmp[3];
+    arr[2] = tmp[2];
+    arr[3] = tmp[1];
+    arr[4] = tmp[4];
+    arr[5] = tmp[7];
+    arr[6] = tmp[6];
+    arr[7] = tmp[5];
+    arr[8] = tmp[9];
+    arr[9] = tmp[8];
+    arr[10] = tmp[11];
+    arr[11] = tmp[10];
 }
 
 void mirrorY(int arr[12],uint8_t *vertIndex){
@@ -375,48 +407,15 @@ void mirrorZ(int arr[12], uint8_t *vertIndex){
     arr[11] = tmp[8];
 }
 
-void mirrorX(int arr[12], uint8_t *vertIndex){
-    *vertIndex = ((*vertIndex<<1)&2) + // 0
-                 ((*vertIndex>>1)&1) + // 1
-                 ((*vertIndex<<1)&8) + // 2
-                 ((*vertIndex>>1)&4) + // 3
-                 ((*vertIndex<<1)&32) + // 4
-                 ((*vertIndex>>1)&16) + // 5
-                 ((*vertIndex<<1)&128) + // 6
-                 ((*vertIndex>>1)&64); // 7 
-
-    int tmp[12];
-    for(int i = 0; i < 12; i++){
-        tmp[i] = arr[i];
-    }
-
-    arr[0] = tmp[0];
-    arr[1] = tmp[3];
-    arr[2] = tmp[2];
-    arr[3] = tmp[1];
-    arr[4] = tmp[4];
-    arr[5] = tmp[7];
-    arr[6] = tmp[6];
-    arr[7] = tmp[5];
-    arr[8] = tmp[9];
-    arr[9] = tmp[8];
-    arr[10] = tmp[11];
-    arr[11] = tmp[10];
-}
-
-
 void buildTriangulationTable(){
     std::vector<bool> processedTable;
     processedTable.resize(256,false);
     std::vector<std::vector<int> > table;
     for(int i = 0; i < 256; i++){table.push_back(std::vector<int>());}
     
-    std::fstream file;
-    file.open("Triangulation.txt",std::fstream::out);
-
     std::vector<baseCase *> cases;
     cases.push_back(new case1); cases.push_back(new case8); 
-    cases.push_back(new case2); // <<< this is the problem
+    cases.push_back(new case2);
     cases.push_back(new case9);
     cases.push_back(new case3); cases.push_back(new case10);
     cases.push_back(new case4); cases.push_back(new case11);
@@ -427,55 +426,46 @@ void buildTriangulationTable(){
         uint8_t index = cases[c]->index; // get the index of the case
         int arr[12] = {0,1,2,3,4,5,6,7,8,9,10,11}; // set the default cube edges
 
-        for(int i = 0; i < 7; i++){ // for each mirror
-            for(int x = 0; x < 4; x++){ // for each x rot
-                for(int y = 0; y < 4; y++){ // for each y rot
-                    for(int z = 0; z < 4; z++){ // for each z rot
-                        if (processedTable[(int)index] == false){           
-                            for(int tri=0; tri < cases[c]->numOfTriangles; tri++){
-                                table[index].push_back(arr[cases[c]->stencil[3*tri]]);
-                                table[index].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
-                                table[index].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
-                            }
-                            processedTable[index] = true;
+        for(int x = 0; x < 4; x++){ // for each x rot
+            for(int y = 0; y < 4; y++){ // for each y rot
+                for(int z = 0; z < 4; z++){ // for each z rot
+                    if (processedTable[index] == false){
+                        uint8_t compIndex = ~index;
+                        processedTable[index] = true;     
+                        processedTable[compIndex] = true;  
+                        // std::cout << +index << "---" << +compIndex << std::endl;
+                        for(int tri=0; tri < cases[c]->numOfTriangles; tri++){
+                            table[index].push_back(arr[cases[c]->stencil[3*tri]]);
+                            table[index].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
+                            table[index].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
+                            // do the complement case
+                            table[compIndex].push_back(arr[cases[c]->stencil[3*tri]]);
+                            table[compIndex].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
+                            table[compIndex].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
                         }
-                     
-                        // do complement rotations
-                        uint8_t t = ~index;
-                        if (processedTable[(int)t] == false){ 
-                            for(int tri=0; tri < cases[c]->numOfTriangles; tri++){
-                                table[(int)t].push_back(arr[cases[c]->stencil[3*tri]]);
-                                table[(int)t].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
-                                table[(int)t].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
-                            }
-                            processedTable[(int)t] = true;   
-                        }
-                        rotateZ(arr,&index);
                     }
-                    rotateY(arr,&index);
+                    rotateZ(arr,&index);
                 }
-                rotateX(arr,&index);
+                rotateY(arr,&index);    
             }
-            index = cases[c]->index; resetCube(arr);
-            if(i==0){mirrorX(arr,&index);}
-            if(i==1){mirrorY(arr,&index);}
-            if(i==2){mirrorZ(arr,&index);}
-            if(i==3){mirrorX(arr,&index);mirrorY(arr,&index);}
-            if(i==4){mirrorX(arr,&index);mirrorZ(arr,&index);}
-            if(i==5){mirrorY(arr,&index);mirrorZ(arr,&index);}
-            if(i==6){mirrorX(arr,&index);mirrorY(arr,&index);mirrorZ(arr,&index);}
-
-        }
+            rotateX(arr,&index);    
+        }// end rotations        
     }   
+
+
+    /*
+        This should proably be its own function
+    */
+    std::fstream file;
+    file.open("Triangulation.txt",std::fstream::out);
+
     file << "std::vector<std::vector<int> > triangleTable = {" << std::endl;
     for(int i = 0; i < table.size(); i++){
         file << "/*" << i << "*/ {";
         for(int j = 0; j < table[i].size(); j++){
             file << table[i][j] << ", ";
         }
-        if(i != 0 && i != 255){
-            //file.seekp(file.tellp()-2);
-        }
+        
         file << "},";
         file << std::endl;
     }
