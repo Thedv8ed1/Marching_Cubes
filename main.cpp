@@ -5,73 +5,13 @@
 #include <bitset>
 #include "lutHelp.hpp"
 
+
 void circle();
 void Etable();
 void Ttable();
 
-/* 34 and 9 are reversed*/
 int main(int argc, char* argv[]){
-
-    uint8_t p = 3;
-    int arr[12] = {0,1,2,3,4,5,6,7,8,9,10,11}; // set the default cube edges
-
-for(int i = 0; i < 1; i++){
-    
-    std::cout << std::endl << +p << std::endl;
-    std::cout << arr[1] << " ";
-    std::cout << arr[3] << " ";
-    std::cout << arr[8] << " ";
-    std::cout << arr[3] << " ";
-    std::cout << arr[8] << " ";
-    std::cout << arr[9] << " " << std::endl;
-    rotateY(arr,&p);
-    /*for(int i = 0; i < 12; i++){
-        std::cout << arr[i] << " ";
-    }
-    rotateZ(arr,&p);
-    std::cout << std::endl;
-    for(int i = 0; i < 12; i++){
-        std::cout << arr[i] << " ";
-    }*/
-  // return 0;
-    std::cout << std::endl << +p << " rotateY"<< std::endl;
-    std::cout << arr[1] << " ";
-    std::cout << arr[3] << " ";
-    std::cout << arr[8] << " ";
-    std::cout << arr[3] << " ";
-    std::cout << arr[8] << " ";
-    std::cout << arr[9] << " " << std::endl;// resetCube(arr); p = 3;
-    rotateY(arr,&p); 
-    std::cout << std::endl << +p << " rotateY" << std::endl;
-    std::cout << arr[1] << " ";
-    std::cout << arr[3] << " ";
-    std::cout << arr[8] << " ";
-    std::cout << arr[3] << " ";
-    std::cout << arr[8] << " ";
-    std::cout << arr[9] << " " << std::endl; 
-    rotateX(arr,&p); 
-    std::cout << std::endl << +p <<" rotateX"<< std::endl;
-    std::cout << arr[1] << " ";
-    std::cout << arr[3] << " ";
-    std::cout << arr[8] << " ";
-    std::cout << arr[3] << " ";
-    std::cout << arr[8] << " ";
-    std::cout << arr[9] << " " << std::endl; return 0;
-    rotateZ(arr,&p);
-    std::cout << std::endl << +p << std::endl;
-    std::cout << arr[1] << " ";
-    std::cout << arr[3] << " ";
-    std::cout << arr[8] << " ";
-    std::cout << arr[3] << " ";
-    std::cout << arr[8] << " ";
-    std::cout << arr[9] << " " << std::endl;
-
-    //mirrorZ(arr,&p);
-}
-
-    buildTriangulationTable();
- return 0;
-
+   buildTriangulationTable();
    circle();
     //Etable(); 
     //Ttable();

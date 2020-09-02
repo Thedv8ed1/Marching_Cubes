@@ -57,155 +57,170 @@ CASE 2: 0 1 2 3 4 5 6 7 8 9 10 11
 */
 
 
-class baseCase{
+class BaseCase{
 public:
-baseCase(){}
-   virtual void p(){
-        std::cout << "index: " << index << std::endl;
-        std::cout << "numOfTriangles: " << numOfTriangles << std::endl;
-        for(int i = 0; i < numOfTriangles*3; i++){
-            std::cout << stencil[i];
+    BaseCase(){}
+    virtual uint8_t get_index(){return 0;};
+    virtual std::vector<int> get_triangles() {
+        std::vector<int> triangles;
+        for(int tri = 0; tri < numOfTriangles; tri++){
+            triangles.push_back(edges[stencil[tri*3]]);
+            triangles.push_back(edges[stencil[1+(tri*3)]]);
+            triangles.push_back(edges[stencil[2+(tri*3)]]);
         }
-        
-    }
-    uint8_t index;
+        return triangles;
+    };
+    void rotateX(){rotateX(verts,edges);}
+    void rotateY(){rotateY(verts,edges);}
+    void rotateZ(){rotateZ(verts,edges);}
+
+    void mirrorX(){mirrorX(verts,edges);}
+    void mirrorY(){mirrorY(verts,edges);}
+    void mirrorZ(){mirrorZ(verts,edges);}
+
+
     int numOfTriangles;
     int stencil[12];
+
+    protected:
+    void rotateX(int verts[8],int edges[12]);
+    void rotateY(int verts[8],int edges[12]);
+    void rotateZ(int verts[8],int edges[12]);
+
+    void mirrorX(int verts[8],int edges[12]);
+    void mirrorY(int verts[8],int edges[12]);
+    void mirrorZ(int verts[8],int edges[12]);
+
+    int verts[8] = {0,1,2,3,4,5,6,7};
+    int edges[12] = {0,1,2,3,4,5,6,7,8,9,10,11};
 };
 
-class case1 :public baseCase{
+class case1 :public BaseCase{
 public:
     case1(){
-        index = 1;
         numOfTriangles = 1;
         int c1Stencil[3] ={0,3,8};
         std::copy(c1Stencil,c1Stencil+3,stencil);
     }
+    virtual uint8_t get_index() override {return (1<<verts[0]);}
 };
-class case2 : public baseCase{
+class case2 : public BaseCase{
 public:
     case2(){
-        index = 3;
         numOfTriangles = 2;
         int c2Stencil[6] ={1,3,9,    3,8,9};
         std::copy(c2Stencil,c2Stencil+6,stencil);
     } 
+    virtual uint8_t get_index()override{return ((1<<verts[0]) + (1<<verts[1]));}
 };
-class case3 : public baseCase{
+class case3 : public BaseCase{
 public:
     case3(){
-        index = 33;
         numOfTriangles = 2;
         int c3Stencil[6] ={0,3,8,    4,5,9};
         std::copy(c3Stencil,c3Stencil+6,stencil);
     } 
+    virtual uint8_t get_index()override{return ((1<<verts[0]) + (1<<verts[5]));}
+
 };
-class case4 : public baseCase{
+class case4 : public BaseCase{
 public:
     case4(){
-        index = 65;
         numOfTriangles = 2;
         int c4Stencil[6] ={0,3,8,    5,6,10};
         std::copy(c4Stencil,c4Stencil+6,stencil);
     }
-     
+    virtual uint8_t get_index()override{return ((1<<verts[0]) + (1<<verts[6]));}
 };
-class case5 : public baseCase{
+class case5 : public BaseCase{
 public:
     case5(){
-        index = 14;
         numOfTriangles = 3;
         int c5Stencil[9] ={0,3,9,    3,9,11,    9,10,11};
         std::copy(c5Stencil,c5Stencil+9,stencil);
     }
+    virtual uint8_t get_index()override{return ((1<<verts[1]) + (1<<verts[2]) + (1<<verts[3]));}
 };
-class case6 : public baseCase{
+class case6 : public BaseCase{
 public:
     case6(){
-        index = 67;
         numOfTriangles = 3;
         int c6Stencil[9] ={1,3,9,    3,8,9,    5,6,10};
         std::copy(c6Stencil,c6Stencil+9,stencil);
     }
-     
+    virtual uint8_t get_index()override{return ((1<<verts[0]) + (1<<verts[1]) + (1<<verts[6]));}
 };
-class case7 : public baseCase{
+class case7 : public BaseCase{
 public:
     case7(){
-        index = 82;
         numOfTriangles = 3;
         int c7Stencil[9] ={0,1,9,    4,7,8,    5,6,10};
         std::copy(c7Stencil,c7Stencil+9,stencil);
     }
-     
+    virtual uint8_t get_index()override{return ((1<<verts[1]) + (1<<verts[4]) + (1<<verts[6]));}
 };
-class case8 : public baseCase{
+class case8 : public BaseCase{
 public:
     case8(){
-        index = 15;
         numOfTriangles = 2;
         int c8Stencil[6] ={8,9,10,    8,10,11};
         std::copy(c8Stencil,c8Stencil+6,stencil);
     }
-     
+    virtual uint8_t get_index()override{return ((1<<verts[0]) + (1<<verts[1]) + (1<<verts[2]) + (1<<verts[3]));} 
 };
-class case9 : public baseCase{
+class case9 : public BaseCase{
 public:
     case9(){
-        index = 141;
         numOfTriangles = 4;
         int c9Stencil[12] ={0,1,10,    0,6,10,    0,6,8,    6,7,8};
         std::copy(c9Stencil,c9Stencil+12,stencil);
     }
-     
+    virtual uint8_t get_index()override{return ((1<<verts[0]) + (1<<verts[2]) + (1<<verts[3]) + (1<<verts[7]));}
 };
-class case10 : public baseCase{
+class case10 : public BaseCase{
 public:
     case10(){
-        index = 85;
         numOfTriangles = 4;
         int c10Stencil[12] ={0,3,4,    3,4,7,    1,2,5,    2,5,6};
         std::copy(c10Stencil,c10Stencil+12,stencil);
     }
-     
+    virtual uint8_t get_index()override{return ((1<<verts[0]) + (1<<verts[2]) + (1<<verts[4]) + (1<<verts[6]));}    
 };
-class case11 : public baseCase{
+class case11 : public BaseCase{
 public:
     case11(){
-        index = 77;
         numOfTriangles = 4;
         int c11Stencil[12] ={0,1,5,    0,5,11,    0,8,11,    6,5,11};
         std::copy(c11Stencil,c11Stencil+12,stencil);
     }
-     
+    virtual uint8_t get_index()override{return ((1<<verts[0]) + (1<<verts[2]) + (1<<verts[3]) + (1<<verts[6]));}   
 };
-class case12 : public baseCase{
+class case12 : public BaseCase{
 public:
     case12(){
-        index = 30;
         numOfTriangles = 4;
         int c12Stencil[12] ={0,3,9,    3,9,11,    4,7,8,    9,10,11}; 
         std::copy(c12Stencil,c12Stencil+12,stencil);
     }
+    virtual uint8_t get_index()override{return ((1<<verts[1]) + (1<<verts[2]) + (1<<verts[3]) + (1<<verts[4]));}
 };
-class case13 : public baseCase{
+class case13 : public BaseCase{
 public:
     case13(){
-        index = 165;
         numOfTriangles = 4;
         int c13Stencil[12] ={0,3,8,    1,2,10,    4,5,9,    6,7,11};
         std::copy(c13Stencil,c13Stencil+12,stencil);
     }
-     
+    virtual uint8_t get_index()override{return ((1<<verts[0]) + (1<<verts[2]) + (1<<verts[5]) + (1<<verts[7]));}
 };
-class case14 : public baseCase{
+class case14 : public BaseCase{
 public:
     case14(){
-        index = 142; 
         numOfTriangles = 4;
         int c14Stencil[12] ={0,3,7,    0,7,10,    0,9,10,    6,7,10};
         std::copy(c14Stencil,c14Stencil+12,stencil);
     }
+    virtual uint8_t get_index()override{return ((1<<verts[1]) + (1<<verts[2]) + (1<<verts[3]) + (1<<verts[7]));}
 };
 /*
     A 12 element array symbolizes the cube
@@ -229,182 +244,204 @@ void resetCube(int arr[12]){
 
 /*
     ALL rotations rotate the cube counter-clockwise
+    horizontal shifts clockwise
+    vertical shifts counter-clockwise
 
 */
-void rotateX(int arr[12], uint8_t *vertIndex){               
-    // shift vertical
-    *vertIndex = ((*vertIndex<<4)&16) + // 0
-               ((*vertIndex<<4)&32) + // 1
-               ((*vertIndex>>1)&2) + // 2
-               ((*vertIndex>>3)&1) + // 3
-               ((*vertIndex<<3)&128) + // 4
-               ((*vertIndex<<1)&64) + // 5
-               ((*vertIndex>>4)&4) + // 6
-               ((*vertIndex>>4)&8); // 7 
+void BaseCase::rotateX(int verts[8], int edges[12]){ 
+    int tmpVerts[8];
+    for(int i = 0; i < 8; i++){
+        tmpVerts[i] = verts[i];
 
-    int tmp[12];
+    }
+    verts[0] = tmpVerts[4];
+    verts[1] = tmpVerts[5];
+    verts[2] = tmpVerts[1];
+    verts[3] = tmpVerts[0];
+    verts[4] = tmpVerts[7];
+    verts[5] = tmpVerts[6];
+    verts[6] = tmpVerts[3];
+    verts[7] = tmpVerts[2];
+
+    int tmpEdges[12];
     for(int i = 0; i < 12; i++){
-        tmp[i] = arr[i];
+        tmpEdges[i] = edges[i];
     }
     // vertical
-    arr[0] = tmp[4];
-    arr[1] = tmp[9];
-    arr[2] = tmp[0];
-    arr[3] = tmp[8];
-    arr[4] = tmp[6];
-    arr[5] = tmp[10];
-    arr[6] = tmp[2];
-    arr[7] = tmp[11];
-    arr[8] = tmp[7];
-    arr[9] = tmp[5];
-    arr[10] = tmp[1];
-    arr[11] = tmp[3];    
+    edges[0] = tmpEdges[4];
+    edges[1] = tmpEdges[9];
+    edges[2] = tmpEdges[0];
+    edges[3] = tmpEdges[8];
+    edges[4] = tmpEdges[6];
+    edges[5] = tmpEdges[10];
+    edges[6] = tmpEdges[2];
+    edges[7] = tmpEdges[11];
+    edges[8] = tmpEdges[7];
+    edges[9] = tmpEdges[5];
+    edges[10] = tmpEdges[1];
+    edges[11] = tmpEdges[3];    
 }
 
-void rotateY(int arr[12], uint8_t *vertIndex){              
-    *vertIndex = (((*vertIndex)<<3)&8) + // 0
-                 (((*vertIndex)>>1)&1) + // 1
-                 (((*vertIndex)>>1)&2) + // 2
-                 (((*vertIndex)>>1)&4) + // 3
-                 (((*vertIndex)<<3)&128) + // 4
-                 (((*vertIndex)>>1)&16) + // 5
-                 (((*vertIndex)>>1)&32) + // 6
-                 (((*vertIndex)>>1)&64); // 7
+void BaseCase::rotateY(int verts[8], int edges[12]){    
+    int tmpVerts[8];
+    for(int i = 0; i < 8; i++){
+        tmpVerts[i] = verts[i];
 
-
-    int tmp[12];
-    for(int i = 0; i < 12; i++){
-        tmp[i] = arr[i];
     }
-    arr[0] = tmp[3];
-    arr[1] = tmp[0];
-    arr[2] = tmp[1];
-    arr[3] = tmp[2];
-    arr[4] = tmp[7];
-    arr[5] = tmp[4];
-    arr[6] = tmp[5];
-    arr[7] = tmp[6];
-    arr[8] = tmp[11];
-    arr[9] = tmp[8];
-    arr[10] = tmp[9];
-    arr[11] = tmp[10];    
+    verts[0] = tmpVerts[3];
+    verts[1] = tmpVerts[0];
+    verts[2] = tmpVerts[1];
+    verts[3] = tmpVerts[2];
+    verts[4] = tmpVerts[7];
+    verts[5] = tmpVerts[4];
+    verts[6] = tmpVerts[5];
+    verts[7] = tmpVerts[6];
+
+    int tmpEdges[12];
+    for(int i = 0; i < 12; i++){
+        tmpEdges[i] = edges[i];
+    }
+    edges[0] = tmpEdges[3];
+    edges[1] = tmpEdges[0];
+    edges[2] = tmpEdges[1];
+    edges[3] = tmpEdges[2];
+    edges[4] = tmpEdges[7];
+    edges[5] = tmpEdges[4];
+    edges[6] = tmpEdges[5];
+    edges[7] = tmpEdges[6];
+    edges[8] = tmpEdges[11];
+    edges[9] = tmpEdges[8];
+    edges[10] = tmpEdges[9];
+    edges[11] = tmpEdges[10];    
 }
 
-void rotateZ(int arr[12], uint8_t *vertIndex){ 
-     *vertIndex = ((*vertIndex<<4)&16) + // 0
-                 ((*vertIndex>>1)&1) + // 1
-                 ((*vertIndex<<1)&8) + // 2
-                 ((*vertIndex<<4)&128) + // 3
-                 ((*vertIndex<<1)&32) + // 4
-                 ((*vertIndex>>4)&2) + // 5
-                 ((*vertIndex>>4)&4) + // 6
-                 ((*vertIndex>>1)&64); // 7
+void BaseCase::rotateZ(int verts[8], int edges[12]){ 
+    int tmpVerts[8];
+    for(int i = 0; i < 8; i++){
+        tmpVerts[i] = verts[i];
+
+    }
+    verts[0] = tmpVerts[4];
+    verts[1] = tmpVerts[0];
+    verts[2] = tmpVerts[3];
+    verts[3] = tmpVerts[7];
+    verts[4] = tmpVerts[5];
+    verts[5] = tmpVerts[1];
+    verts[6] = tmpVerts[2];
+    verts[7] = tmpVerts[6];    
     
-    int tmp[12];
+    int tmpEdges[12];
     for(int i = 0; i < 12; i++){
-        tmp[i] = arr[i];
+        tmpEdges[i] = edges[i];
     }
-    // horizontal    
-    arr[0] = tmp[8];
-    arr[1] = tmp[3];
-    arr[2] = tmp[11];
-    arr[3] = tmp[7];
-    arr[4] = tmp[9];
-    arr[5] = tmp[1];
-    arr[6] = tmp[10];
-    arr[7] = tmp[5];
-    arr[8] = tmp[4];
-    arr[9] = tmp[0];
-    arr[10] = tmp[2];
-    arr[11] = tmp[6];
+    edges[0] = tmpEdges[8];
+    edges[1] = tmpEdges[3];
+    edges[2] = tmpEdges[11];
+    edges[3] = tmpEdges[7];
+    edges[4] = tmpEdges[9];
+    edges[5] = tmpEdges[1];
+    edges[6] = tmpEdges[10];
+    edges[7] = tmpEdges[5];
+    edges[8] = tmpEdges[4];
+    edges[9] = tmpEdges[0];
+    edges[10] = tmpEdges[2];
+    edges[11] = tmpEdges[6];
 }
 
-void mirrorX(int arr[12], uint8_t *vertIndex){
-    *vertIndex = ((*vertIndex<<1)&2) + // 0
-                 ((*vertIndex>>1)&1) + // 1
-                 ((*vertIndex<<1)&8) + // 2
-                 ((*vertIndex>>1)&4) + // 3
-                 ((*vertIndex<<1)&32) + // 4
-                 ((*vertIndex>>1)&16) + // 5
-                 ((*vertIndex<<1)&128) + // 6
-                 ((*vertIndex>>1)&64); // 7 
-
-    int tmp[12];
-    for(int i = 0; i < 12; i++){
-        tmp[i] = arr[i];
+void BaseCase::mirrorX(int verts[8], int edges[12]){
+    int tmpVerts[8];
+    for(int i = 0; i < 8; i++){
+        tmpVerts[i] = verts[i];
     }
+    verts[0] = tmpVerts[1];
+    verts[1] = tmpVerts[0];
+    verts[2] = tmpVerts[3];
+    verts[3] = tmpVerts[2];
+    verts[4] = tmpVerts[5];
+    verts[5] = tmpVerts[4];
+    verts[6] = tmpVerts[7];
+    verts[7] = tmpVerts[6]; 
 
-    arr[0] = tmp[0];
-    arr[1] = tmp[3];
-    arr[2] = tmp[2];
-    arr[3] = tmp[1];
-    arr[4] = tmp[4];
-    arr[5] = tmp[7];
-    arr[6] = tmp[6];
-    arr[7] = tmp[5];
-    arr[8] = tmp[9];
-    arr[9] = tmp[8];
-    arr[10] = tmp[11];
-    arr[11] = tmp[10];
+    int tmpEdges[12];
+    for(int i = 0; i < 12; i++){
+        tmpEdges[i] = edges[i];
+    }
+    edges[0] = tmpEdges[0];
+    edges[1] = tmpEdges[3];
+    edges[2] = tmpEdges[2];
+    edges[3] = tmpEdges[1];
+    edges[4] = tmpEdges[4];
+    edges[5] = tmpEdges[7];
+    edges[6] = tmpEdges[6];
+    edges[7] = tmpEdges[5];
+    edges[8] = tmpEdges[9];
+    edges[9] = tmpEdges[8];
+    edges[10] = tmpEdges[11];
+    edges[11] = tmpEdges[10];
 }
 
-void mirrorY(int arr[12],uint8_t *vertIndex){
-    *vertIndex = ((*vertIndex<<4)&16) + // 0
-                 ((*vertIndex<<4)&32) + // 1
-                 ((*vertIndex<<4)&64) + // 2
-                 ((*vertIndex<<4)&128) + // 3
-                 ((*vertIndex>>4)&1) + // 4
-                 ((*vertIndex>>4)&2) + // 5
-                 ((*vertIndex>>4)&4) + // 6
-                 ((*vertIndex>>4)&8); // 7 
-    
-    int tmp[12];
-    for(int i = 0; i < 12; i++){
-        tmp[i] = arr[i];
+void BaseCase::mirrorY(int verts[8], int edges[12]){
+    int tmpVerts[8];
+    for(int i = 0; i < 8; i++){
+        tmpVerts[i] = verts[i];
     }
+    verts[0] = tmpVerts[4];
+    verts[1] = tmpVerts[5];
+    verts[2] = tmpVerts[6];
+    verts[3] = tmpVerts[7];
+    verts[4] = tmpVerts[0];
+    verts[5] = tmpVerts[1];
+    verts[6] = tmpVerts[2];
+    verts[7] = tmpVerts[3]; 
 
-    arr[0] = tmp[4];
-    arr[1] = tmp[5];
-    arr[2] = tmp[6];
-    arr[3] = tmp[7];
-    arr[4] = tmp[0];
-    arr[5] = tmp[1];
-    arr[6] = tmp[2];
-    arr[7] = tmp[3];
-    arr[8] = tmp[8];
-    arr[9] = tmp[9];
-    arr[10] = tmp[10];
-    arr[11] = tmp[11];
+    int tmpEdges[12];
+    for(int i = 0; i < 12; i++){
+        tmpEdges[i] = edges[i];
+    }
+    edges[0] = tmpEdges[4];
+    edges[1] = tmpEdges[5];
+    edges[2] = tmpEdges[6];
+    edges[3] = tmpEdges[7];
+    edges[4] = tmpEdges[0];
+    edges[5] = tmpEdges[1];
+    edges[6] = tmpEdges[2];
+    edges[7] = tmpEdges[3];
+    edges[8] = tmpEdges[8];
+    edges[9] = tmpEdges[6];
+    edges[10] = tmpEdges[10];
+    edges[11] = tmpEdges[11];
 }
 
-void mirrorZ(int arr[12], uint8_t *vertIndex){
-   *vertIndex = ((*vertIndex<<3)&8) + // 0
-                ((*vertIndex<<1)&4) + // 1
-                ((*vertIndex>>1)&2) + // 2
-                ((*vertIndex>>3)&1) + // 3
-                ((*vertIndex<<3)&128) + // 4
-                ((*vertIndex<<1)&64) + // 5
-                ((*vertIndex>>1)&32) + // 6
-                ((*vertIndex>>3)&16); // 7 
-
-    int tmp[12];
-
-    for(int i = 0; i < 12; i++){
-        tmp[i] = arr[i];
+void BaseCase::mirrorZ(int verts[8], int edges[12]){
+    int tmpVerts[8];
+    for(int i = 0; i < 8; i++){
+        tmpVerts[i] = verts[i];
     }
+    verts[0] = tmpVerts[3];
+    verts[1] = tmpVerts[2];
+    verts[2] = tmpVerts[1];
+    verts[3] = tmpVerts[0];
+    verts[4] = tmpVerts[7];
+    verts[5] = tmpVerts[6];
+    verts[6] = tmpVerts[5];
+    verts[7] = tmpVerts[4]; 
 
-    arr[0] = tmp[2];
-    arr[1] = tmp[1];
-    arr[2] = tmp[0];
-    arr[3] = tmp[3];
-    arr[4] = tmp[6];
-    arr[5] = tmp[5];
-    arr[6] = tmp[4];
-    arr[7] = tmp[7];
-    arr[8] = tmp[11];
-    arr[9] = tmp[10];
-    arr[10] = tmp[9];
-    arr[11] = tmp[8];
+    int tmpEdges[12];
+    for(int i = 0; i < 12; i++){
+        tmpEdges[i] = edges[i];
+    }
+    edges[0] = tmpEdges[2];
+    edges[1] = tmpEdges[3];
+    edges[2] = tmpEdges[0];
+    edges[3] = tmpEdges[1];
+    edges[4] = tmpEdges[6];
+    edges[5] = tmpEdges[7];
+    edges[6] = tmpEdges[4];
+    edges[7] = tmpEdges[5];
+    edges[8] = tmpEdges[10];
+    edges[9] = tmpEdges[11];
+    edges[10] = tmpEdges[8];
+    edges[11] = tmpEdges[9];
 }
 
 void buildTriangulationTable(){
@@ -413,44 +450,61 @@ void buildTriangulationTable(){
     std::vector<std::vector<int> > table;
     for(int i = 0; i < 256; i++){table.push_back(std::vector<int>());}
     
-    std::vector<baseCase *> cases;
-    cases.push_back(new case1); cases.push_back(new case8); 
+    std::vector<BaseCase *> cases;
+    cases.push_back(new case1);  
     cases.push_back(new case2);
+    cases.push_back(new case3);
+    cases.push_back(new case4); 
+    cases.push_back(new case5); 
+    cases.push_back(new case6); 
+    cases.push_back(new case7); 
+    cases.push_back(new case8);
     cases.push_back(new case9);
-    cases.push_back(new case3); cases.push_back(new case10);
-    cases.push_back(new case4); cases.push_back(new case11);
-    cases.push_back(new case5); cases.push_back(new case12);
-    cases.push_back(new case6); cases.push_back(new case13);
-    cases.push_back(new case7); cases.push_back(new case14);
-    for(uint8_t c = 0; c<cases.size(); c++){ // for every case
-        uint8_t index = cases[c]->index; // get the index of the case
-        int arr[12] = {0,1,2,3,4,5,6,7,8,9,10,11}; // set the default cube edges
+    cases.push_back(new case10);
+    cases.push_back(new case11);
+    cases.push_back(new case12);
+    cases.push_back(new case13);
+    cases.push_back(new case14);
 
-        for(int x = 0; x < 4; x++){ // for each x rot
-            for(int y = 0; y < 4; y++){ // for each y rot
-                for(int z = 0; z < 4; z++){ // for each z rot
-                    if (processedTable[index] == false){
-                        uint8_t compIndex = ~index;
-                        processedTable[index] = true;     
-                        processedTable[compIndex] = true;  
-                        // std::cout << +index << "---" << +compIndex << std::endl;
-                        for(int tri=0; tri < cases[c]->numOfTriangles; tri++){
-                            table[index].push_back(arr[cases[c]->stencil[3*tri]]);
-                            table[index].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
-                            table[index].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
+    for(uint8_t c = 0; c<cases.size(); c++){ // for every case
+    for(int mir = 0; mir < 7; mir++){
+        for(int x = 0; x < 4; x++){
+            for(int y = 0; y < 4; y++){
+                for(int z = 0; z < 4; z++){
+                    if(processedTable[cases[c]->get_index()] == false){
+                        //std::cout << x << " " << y << " " << z << "----" << std::endl;
+                        uint8_t compIndex = ~(cases[c]->get_index());
+                        //std::cout  << " " << +cases[c]->get_index() << std::endl;
+                        std::vector<int> triangles = cases[c]->get_triangles();
+                        for(int i = 0; i < triangles.size(); i++){
+                        //    std::cout << triangles[i] << " ";
+                            table[cases[c]->get_index()].push_back(triangles[i]);
                             // do the complement case
-                            table[compIndex].push_back(arr[cases[c]->stencil[3*tri]]);
-                            table[compIndex].push_back(arr[cases[c]->stencil[(3*tri)+1]]);
-                            table[compIndex].push_back(arr[cases[c]->stencil[(3*tri)+2]]);
+                            table[compIndex].push_back(triangles[i]);                            
                         }
-                    }
-                    rotateZ(arr,&index);
-                }
-                rotateY(arr,&index);    
-            }
-            rotateX(arr,&index);    
-        }// end rotations        
-    }   
+                        std::cout << std::endl;
+                        processedTable[cases[c]->get_index()] = true;
+                        processedTable[compIndex] = true;
+                    } 
+                    cases[c]->rotateZ();
+               }  
+               cases[c]->rotateY();
+            }   
+            cases[c]->rotateX();   
+        }
+
+        if(mir == 0){cases[c]->mirrorX();}
+        else if(mir == 1){cases[c]->mirrorY();}
+        else if(mir == 2){cases[c]->mirrorZ();}
+        else if(mir == 3){cases[c]->mirrorX();cases[c]->mirrorY();}
+        else if(mir == 4){cases[c]->mirrorX();cases[c]->mirrorZ();}
+        else if(mir == 5){cases[c]->mirrorX();cases[c]->mirrorZ();}
+        else{cases[c]->mirrorX();cases[c]->mirrorY();cases[c]->mirrorZ();}
+    }
+    }
+
+
+
 
 
     /*
