@@ -17,7 +17,30 @@ rolling the bits accounts for rotation
 */
 
 Surface::Surface(){
+// this should be its own function that gets called during construction
+    std::fstream inputTable;
+    inputTable.open("Triangulation.txt", ios::in);    
+    if(!(inputTable.is_open())){std::cout<<"Could not open Triangulation.txt" << std::endl; exit(-1);}
+    /*
+        Resize the table
+    */
+    triangleTable.resize(256);
+    for(int i = 0; i < 256;i++){triangleTable.push_back(std::vector<int>());}
+    /*
+        Load the triangles
+    */
+   std::string search;
+   for(int index = 0; index < 256; index++){
+       inputTable >> search;
+       int size = std::stoi(search);
+       for(int vert = 0; vert < size; vert++){
+            inputTable >> search;
+            triangleTable[index].push_back(std::stoi(search));
+       }
 
+   }
+
+   inputTable.close();
 }
 
 Surface::~Surface(){
@@ -81,7 +104,7 @@ void Surface::load_surface_data(char *fileName){
                 file >> s;
                 zIN = std::stoi(s);
                 file >> s;
-                if(xIN > width || yIN > height || zIN > depth){continue;} // if a point is greater than a specified dimention skip over it
+                if(xIN >= width || yIN >= height || zIN >= depth){continue;} // if a point is greater than a specified dimention skip over it
                points[xIN][yIN][zIN] = std::stod(s);
             }
         }
@@ -147,6 +170,7 @@ std::pair<int,int> Surface::edgeToVertex(int edgeList) {
         case 2048: return std::make_pair(3,7);
         default: break;
     }
+    return std::make_pair(-1,-1);
 }
 
 void Surface::generate_triangles(Cube cube){    
@@ -160,13 +184,13 @@ void Surface::generate_triangles(Cube cube){
     int edgeList = edgeTable[index];
     //if(index == 96 ){std::cout << edgeList << std::endl; exit(0);}
 
-    for(int i = 0; i < 12; i++){
+    for(unsigned int i = 0; i < 12; i++){
         std::pair<int,int> edge2Verts = edgeToVertex(edgeList&(1<<i));
         if(edge2Verts.first == -1){continue;}
         edgePoints[i] = interpolate(cube.verticies[edge2Verts.first],cube.verticies[edge2Verts.second],cube.values[edge2Verts.first],cube.values[edge2Verts.second]);
     }
 
-    for(int edge = 0; edge < triangleTable[index].size(); edge+=3){
+    for(unsigned int edge = 0; edge < triangleTable[index].size(); edge+=3){
         Triangle t;
         t.p[0] = edgePoints[triangleTable[index][edge]];
         t.p[1] = edgePoints[triangleTable[index][edge+1]];
@@ -176,7 +200,7 @@ void Surface::generate_triangles(Cube cube){
 
 }
 void Surface::render_surface(){
-  for(int i = 0; i < triangles.size(); i++){
+  for(unsigned int i = 0; i < triangles.size(); i++){
     glColor3f(0.560784   ,0.560784   ,0.737255);
     glBegin(GL_TRIANGLES);
     glVertex3f(triangles[i].p[0].x,triangles[i].p[0].y,triangles[i].p[0].z);

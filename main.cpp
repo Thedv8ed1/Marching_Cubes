@@ -11,7 +11,9 @@ void Etable();
 void Ttable();
 
 int main(int argc, char* argv[]){
-   //circle();
+   buildTriangulationTable();
+
+   circle();
     //Etable(); 
     //Ttable();
   //  return 0;
@@ -42,9 +44,9 @@ void circle(){
     "\n# height " << height<<
     "\n# depth " << depth << std::endl << std::endl;
     int shiftAmt = 10;
-    for(int x = 0; x < 20; x++){
-        for(int y = 0; y < 20; y++){
-            for(int z = 0; z < 20; z++){
+    for(int x = 0; x < width; x++){
+        for(int y = 0; y < height; y++){
+            for(int z = 0; z < depth; z++){
                 file << x << " ";
                 file << y << " ";
                 file << z << " ";
