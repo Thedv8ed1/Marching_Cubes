@@ -56,6 +56,7 @@ CASE 2: 0 1 2 3 4 5 6 7 8 9 10 11
 CASE 2: 0 1 2 3 4 5 6 7 8 9 10 11
 */
 
+void outputTriTable(std::vector< std::vector<int> > table);
 
 class BaseCase{
 public:
@@ -235,7 +236,6 @@ void resetCube(int arr[12]){
     }
 }
 
-
 /*
     There is probably a way to do all these with a loop
     TODO: figure it out
@@ -260,8 +260,8 @@ void BaseCase::rotateX(int verts[8], int edges[12]){
     verts[3] = tmpVerts[0];
     verts[4] = tmpVerts[7];
     verts[5] = tmpVerts[6];
-    verts[6] = tmpVerts[3];
-    verts[7] = tmpVerts[2];
+    verts[6] = tmpVerts[2];
+    verts[7] = tmpVerts[3];
 
     int tmpEdges[12];
     for(int i = 0; i < 12; i++){
@@ -467,22 +467,20 @@ void buildTriangulationTable(){
     cases.push_back(new case14);
 
     for(uint8_t c = 0; c<cases.size(); c++){ // for every case
-    for(int mir = 0; mir < 7; mir++){
-        for(int x = 0; x < 4; x++){
-            for(int y = 0; y < 4; y++){
-                for(int z = 0; z < 4; z++){
+        for(unsigned int x = 0; x < 4; x++){ // for each x rot
+            for(unsigned int y = 0; y < 4; y++){ // for each y rot
+                for(unsigned int z = 0; z < 4; z++){ // for each z rot
                     if(processedTable[cases[c]->get_index()] == false){
                         //std::cout << x << " " << y << " " << z << "----" << std::endl;
                         uint8_t compIndex = ~(cases[c]->get_index());
                         //std::cout  << " " << +cases[c]->get_index() << std::endl;
                         std::vector<int> triangles = cases[c]->get_triangles();
-                        for(int i = 0; i < triangles.size(); i++){
+                        for(unsigned int i = 0; i < triangles.size(); i++){
                         //    std::cout << triangles[i] << " ";
                             table[cases[c]->get_index()].push_back(triangles[i]);
                             // do the complement case
                             table[compIndex].push_back(triangles[i]);                            
                         }
-                        std::cout << std::endl;
                         processedTable[cases[c]->get_index()] = true;
                         processedTable[compIndex] = true;
                     } 
@@ -492,31 +490,21 @@ void buildTriangulationTable(){
             }   
             cases[c]->rotateX();   
         }
-
-        if(mir == 0){cases[c]->mirrorX();}
-        else if(mir == 1){cases[c]->mirrorY();}
-        else if(mir == 2){cases[c]->mirrorZ();}
-        else if(mir == 3){cases[c]->mirrorX();cases[c]->mirrorY();}
-        else if(mir == 4){cases[c]->mirrorX();cases[c]->mirrorZ();}
-        else if(mir == 5){cases[c]->mirrorX();cases[c]->mirrorZ();}
-        else{cases[c]->mirrorX();cases[c]->mirrorY();cases[c]->mirrorZ();}
-    }
     }
 
+    outputTriTable(table);
+    
+}
 
+void outputTriTable(std::vector< std::vector<int> > table){
 
-
-
-    /*
-        This should proably be its own function
-    */
     std::fstream file;
     file.open("Triangulation.txt",std::fstream::out);
 
     file << "std::vector<std::vector<int> > triangleTable = {" << std::endl;
-    for(int i = 0; i < table.size(); i++){
+    for(unsigned int i = 0; i < table.size(); i++){
         file << "/*" << i << "*/ {";
-        for(int j = 0; j < table[i].size(); j++){
+        for(unsigned int j = 0; j < table[i].size(); j++){
             file << table[i][j] << ", ";
         }
         

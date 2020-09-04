@@ -11,8 +11,7 @@ void Etable();
 void Ttable();
 
 int main(int argc, char* argv[]){
-   buildTriangulationTable();
-   circle();
+   //circle();
     //Etable(); 
     //Ttable();
   //  return 0;
@@ -21,8 +20,12 @@ int main(int argc, char* argv[]){
 
     application app;
     app.init(argc, argv, width, height);
-    if(argc == 2)
+    if(argc == 2){
         app.load_grid(argv[1]);
+    }
+    else{
+        buildTriangulationTable();
+    }
     app.run();
 }
 
@@ -104,112 +107,3 @@ void Etable(){
     }
     file.close();
 }
-
-
-
-void Ttable(){
-        std::fstream fileOUT;
-    fileOUT.open("edgelist.txt");
-
-        for(int i = 0; i < 256; i++){
-            fileOUT << "/*" << i << "*/ "; 
-            int count = 0;
-            long pos = fileOUT.tellp();
-        if((i>>0)&1){//v0
-            if(((i>>1)&1)!=((i>>0)&1)){fileOUT << "0 "; count++; } // if not v1 set e0
-            if(((i>>3)&1)!=((i>>0)&1)){fileOUT << "3 ";count++;} // if not v3 set e3
-            if(((i>>4)&1)!=((i>>0)&1)){fileOUT << "8 ";count++;} // if not v4 set e8
-        }
-        if((i>>1)&1){//v1
-            if(((i>>0)&1)!=((i>>1)&1)){fileOUT << "0 ";count++;} // if not v0 set e0
-            if(((i>>2)&1)!=((i>>1)&1)){fileOUT << "1 ";count++;} // if  not v2 set e1
-            if(((i>>5)&1)!=((i>>1)&1)){fileOUT << "9 ";count++;} // if not v5 set e9
-        }
-        if((i>>2)&1 ){//v2
-            if(((i>>1)&1)!=((i>>2)&1)){fileOUT << "1 ";count++;} // if not v1 set e1
-            if(((i>>3)&1)!=((i>>2)&1)){fileOUT << "2 ";count++;} // if not v3 set e2
-            if(((i>>6)&1)!=((i>>2)&1)){fileOUT << "10 ";count++;} // if not v6 set e10
-        }
-        if((i>>3)&1 ){//v3
-            if(((i>>0)&1)!=((i>>3)&1)){fileOUT << "3 ";count++;} // if not v0 set e3
-            if(((i>>2)&1)!=((i>>3)&1)){fileOUT << "2 ";count++;} // if not v2 set e2
-            if(((i>>7)&1)!=((i>>3)&1)){fileOUT << "0 ";count++;} // if not v7 set e11
-        }
-        if((i>>4)&1 ){//v4
-            if(((i>>0)&1)!=((i>>4)&1)){fileOUT << "8 ";count++;} // if not v0 set e8
-            if(((i>>5)&1)!=((i>>4)&1)){fileOUT << "4 ";count++;} // if not v5 set e4
-            if(((i>>7)&1)!=((i>>4)&1)){fileOUT << "7 ";count++;} // if not v7 set e7
-        }
-        if((i>>5)&1){//v5
-            if(((i>>1)&1)!=((i>>5)&1)){fileOUT << "9 ";count++;} // if not v1 set e9
-            if(((i>>4)&1)!=((i>>5)&1)){fileOUT << "4 ";count++;} // if not v4 set e4
-            if(((i>>6)&1)!=((i>>5)&1)){fileOUT << "5 ";count++;} // if not v6 set e5
-        }
-        if((i>>6)&1){//v6
-            if(((i>>2)&1)!=((i>>6)&1)){fileOUT << "10 ";count++;} // if not v2 set e10
-            if(((i>>5)&1)!=((i>>6)&1)){fileOUT << "5 ";count++;} // if not v5 set e5
-            if(((i>>7)&1)!=((i>>6)&1)){fileOUT << "6 ";count++;} // if not v7 set e6
-        }
-        if((i>>7)&1){//v7
-            if(((i>>3)&1)!=((i>>7)&1)){fileOUT << "11 ";count++;} // if not v3 set e11
-            if(((i>>4)&1)!=((i>>7)&1)){fileOUT << "7 ";count++;} // if not v4 set e7
-            if(((i>>6)&1)!=((i>>7)&1)){fileOUT << "6 ";count++;} // if not v6 set e6
-        }
-
-        /*
-        long pos2 = fileOUT.tellp();
-        if(count%3 != 0){
-        for(int j = 0; j < (count%3)+1; j++){
-            fileOUT.seekp(pos); // go to start of line
-            std::string s;
-            fileOUT >> s; //get edge number
-            pos = fileOUT.tellp(); // since we moved up the stream get the positon
-            fileOUT.seekp(pos2); // move to the end
-            fileOUT << s <<" "; // put the edge number at the end
-            pos2 = fileOUT.tellp(); // update the end position
-
-        }
-        }*/
-        fileOUT << std::endl;
-        }
-fileOUT.close();
-
-}
-
-/*
-
- 3 8 1 9 1 3
-
-     5 6 
-  12 4 3 7 
-  11 1 2 8
-    10 9   
-
-
-    
-    e5 e6  e7  e8
-    e9 e10 e11 e12
-    e1 e2  e3  e4
-
-
-    e10 e11 e12
-    e7  e8  e9
-    e4  e5  e6
-    e1  e2  e3
-
- case 1 00000001 
-        000100001001
-
- case 2 00000010
-        001000000011
-
- case 3 00000011
-        001100001010
-
-case 4 00000100
-        01000000110
-
- case 5 00000101
-        010100001111
-
-*/

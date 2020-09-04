@@ -140,8 +140,8 @@ void application::draw_event() {
   glPopMatrix();
 
   // draw the grid
-  //grid.render();
-  //grid.renderAxis();
+  grid.render();
+  grid.renderAxis();
 
   surface.render_surface();
 
@@ -180,16 +180,9 @@ void application::keyboard_event(unsigned char key, int x, int y) {
       glPolygonMode(GL_BACK, GL_LINE);
     }
   }
-  int m_index = (int) key - 48;
-  //if (o.valid_material(m_index))
-  //  material_index = m_index;
-
 }
 
 void application::load_grid(char *fileName){
-  int x,y,z;
-
-
 
   surface.load_surface_data(fileName);
   grid.load_dimensions(
@@ -199,10 +192,6 @@ void application::load_grid(char *fileName){
   );
   grid.create_grid();
 
-
-  /*
-    TODO: MOVE THIS INTO ITS OWN FUNCTION
-  */
   surface.marching_cube();
 
 }
