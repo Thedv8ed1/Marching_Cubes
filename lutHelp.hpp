@@ -501,17 +501,18 @@ void outputTriTable(std::vector< std::vector<int> > table){
     std::fstream file;
     file.open("Triangulation.txt",std::fstream::out);
 
-    file << "std::vector<std::vector<int> > triangleTable = {" << std::endl;
+    //file << "std::vector<std::vector<int> > triangleTable = {" << std::endl;
     for(unsigned int i = 0; i < table.size(); i++){
-        file << "/*" << i << "*/ {";
+       // file << "/*" << i << "*/ {";
+        file << table[i].size() << " ";
         for(unsigned int j = 0; j < table[i].size(); j++){
-            file << table[i][j] << ", ";
+            file << table[i][j] << " ";
         }
         
-        file << "},";
+       // file << "},";
         file << std::endl;
     }
-    file << "};";
-    file.close();
+   // file << "};";
+    file.close(); //
 }
 
