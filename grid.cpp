@@ -49,25 +49,25 @@ void Grid::render(){
 }
 
 void Grid::renderAxis(){
-  //x
+  //x red
   glBegin(GL_LINES);    
   glColor3f(1 ,0 ,0 );
-  for(double i = 0; i < 1;i+=0.2){
+  for(double i = 0; i < 1;i++){
     glVertex3f(0, i, 0);
     glVertex3f(100, i, 0);
   }
 
-  //y
+  //y green
     glColor3f(0 ,1 ,0 );
-  for(double i = 0; i < 1;i+=0.2){
+  for(double i = 0; i < 1;i++){
     glVertex3f(i, 0, 0);
     glVertex3f(i, 100, 0);
   }
 
 
-  //z
+  //z blue
     glColor3f(0 ,0 ,1 );
-  for(double i = 0; i < 1;i+=0.2){
+  for(double i = 0; i < 1;i++){
     glVertex3f(0, i, 0);
     glVertex3f(0, i, 100);
   }
